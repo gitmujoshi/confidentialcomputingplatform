@@ -28,7 +28,7 @@ flowchart TB
         end
     end
 
-    Client --> VM["1. Request Training"]
+    Client --> |"1. Request Training"|VM
     Config --> VM["2. Load Config"]
     VM --> Attest["3. Request Attestation"]
     Attest --> VM["4. Verify Environment"]
