@@ -16,22 +16,22 @@ sequenceDiagram
     participant Enclave
     participant Monitor
 
-    Client->>VM: 1. Initialize Training
-    VM->>Attest: 2. Request Attestation
-    Attest->>VM: 3. Verify Environment
-    VM->>KV: 4. Request Encryption Keys
-    KV->>VM: 5. Provide Keys
-    VM->>Storage: 6. Request Training Data
-    Storage->>VM: 7. Provide Encrypted Data
-    VM->>Enclave: 8. Load Data & Keys
-    Enclave->>Enclave: 9. Decrypt Data
+    Client->>VM: Initialize Training
+    VM->>Attest: Request Attestation
+    Attest->>VM: Verify Environment
+    VM->>KV: Request Encryption Keys
+    KV->>VM: Provide Keys
+    VM->>Storage: Request Training Data
+    Storage->>VM: Provide Encrypted Data
+    VM->>Enclave: Load Data & Keys
+    Enclave->>Enclave: Decrypt Data
     loop Training Epochs
-        Enclave->>Enclave: 10. Train Model
-        Enclave->>Storage: 11. Save Checkpoint
-        Monitor->>Enclave: 12. Monitor Progress
+        Enclave->>Enclave: Train Model
+        Enclave->>Storage: Save Checkpoint
+        Monitor->>Enclave: Monitor Progress
     end
-    Enclave->>Storage: 13. Save Final Model
-    Storage->>Client: 14. Training Complete
+    Enclave->>Storage: Save Final Model
+    Storage->>Client: Training Complete
 
     Note over Client,Storage: Secure Training Workflow
     Note over Enclave: All sensitive operations<br/>performed in secure enclave

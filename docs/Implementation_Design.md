@@ -245,56 +245,50 @@ The security monitoring system provides comprehensive protection for the confide
 ## Security Monitoring Diagram
 
 ```mermaid
-graph LR
-    subgraph "Security Monitoring"
+flowchart LR
+    subgraph SecurityMonitoring["Security Monitoring"]
         Monitor[Security Monitor]
         Alert[Alert System]
-        Remediate[Remediation Service]
     end
 
-    subgraph "Azure Resources"
+    subgraph AzureResources["Azure Resources"]
         VM[Confidential VM]
         Storage[Secure Storage]
         KV[Key Vault]
         NSG[Network Security]
     end
 
-    subgraph "Security Events"
+    subgraph SecurityEvents["Security Events"]
         Auth[Authentication]
         Access[Access Control]
         Network[Network Activity]
         Config[Configuration]
     end
 
-    Monitor -->|1. Monitor| VM
-    Monitor -->|2. Monitor| Storage
-    Monitor -->|3. Monitor| KV
-    Monitor -->|4. Monitor| NSG
+    Monitor --> VM["Monitor Resources"]
+    Monitor --> Storage["Monitor Resources"]
+    Monitor --> KV["Monitor Resources"]
+    Monitor --> NSG["Monitor Resources"]
 
-    VM -->|5. Events| Auth
-    Storage -->|6. Events| Access
-    KV -->|7. Events| Access
-    NSG -->|8. Events| Network
+    VM --> Auth["Report Events"]
+    Storage --> Access["Report Events"]
+    KV --> Access["Report Events"]
+    NSG --> Network["Report Events"]
 
-    Auth -->|9. Report| Monitor
-    Access -->|10. Report| Monitor
-    Network -->|11. Report| Monitor
-    Config -->|12. Report| Monitor
+    Auth --> Monitor["Report Events"]
+    Access --> Monitor["Report Events"]
+    Network --> Monitor["Report Events"]
+    Config --> Monitor["Report Events"]
 
-    Monitor -->|13. Trigger| Alert
-    Alert -->|14. Notify| Remediate
-    Remediate -->|15. Fix| VM
-    Remediate -->|16. Fix| Storage
-    Remediate -->|17. Fix| KV
-    Remediate -->|18. Fix| NSG
+    Monitor --> Alert["Trigger Alert"]
 
-    classDef monitor fill:#0072C6,stroke:#333,stroke-width:2px,color:white;
-    classDef resource fill:#107C10,stroke:#333,stroke-width:2px,color:white;
-    classDef event fill:#FFB900,stroke:#333,stroke-width:2px,color:black;
+    classDef monitor fill:#0072C6,stroke:#333,stroke-width:2px,color:white
+    classDef resource fill:#107C10,stroke:#333,stroke-width:2px,color:white
+    classDef event fill:#FFB900,stroke:#333,stroke-width:2px,color:black
 
-    class Monitor,Alert,Remediate monitor;
-    class VM,Storage,KV,NSG resource;
-    class Auth,Access,Network,Config event;
+    class Monitor,Alert monitor
+    class VM,Storage,KV,NSG resource
+    class Auth,Access,Network,Config event
 ```
 
 ## Monitoring Components
