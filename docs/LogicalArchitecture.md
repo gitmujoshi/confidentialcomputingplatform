@@ -26,11 +26,6 @@ graph TB
             Model[ML Model]
             Data[Encrypted Data]
         end
-
-        subgraph "Security Services"
-            Monitor[Security Monitor]
-            Alert[Alert System]
-        end
     end
 
     %% Client Interactions
@@ -52,33 +47,16 @@ graph TB
     Enclave -->|10. Train Model| Model
     Model -->|11. Save Model| Storage
 
-    %% Security Monitoring
-    Monitor -->|12. Monitor Resources| VM
-    Monitor -->|13. Monitor Resources| Storage
-    Monitor -->|14. Monitor Resources| KeyVault
-    Monitor -->|15. Monitor Resources| Enclave
-
-    %% Security Events
-    VM -->|16. Report Events| Monitor
-    Storage -->|17. Report Events| Monitor
-    KeyVault -->|18. Report Events| Monitor
-    Enclave -->|19. Report Events| Monitor
-
-    %% Alert System
-    Monitor -->|20. Trigger Alert| Alert
-
     %% Completion
-    Storage -->|21. Training Complete| Client
+    Storage -->|12. Training Complete| Client
 
     classDef azure fill:#0072C6,stroke:#333,stroke-width:2px,color:white;
     classDef secure fill:#107C10,stroke:#333,stroke-width:2px,color:white;
     classDef client fill:#FFB900,stroke:#333,stroke-width:2px,color:black;
-    classDef security fill:#E81123,stroke:#333,stroke-width:2px,color:white;
 
     class Client,Config client;
     class Attest,KeyVault,Storage secure;
     class VM,Enclave,Model,Data azure;
-    class Monitor,Alert security;
 ```
 
 ## Key Components
@@ -98,10 +76,6 @@ graph TB
 - **ML Model**: The machine learning model being trained
 - **Encrypted Data**: Training data protected by encryption
 
-### Security Services
-- **Security Monitor**: Continuously monitors system security
-- **Alert System**: Notifies of security events
-
 ## Security Features
 
 1. **Hardware-level Protection**
@@ -118,10 +92,10 @@ graph TB
    - Network security rules
    - Authentication and authorization
 
-4. **Monitoring and Remediation**
+4. **Monitoring and Alerting**
    - Real-time security monitoring
    - Automated alerting
-   - Automatic remediation of security issues
+   - Security event tracking
 
 ## Integration Points
 
