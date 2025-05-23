@@ -62,74 +62,64 @@ graph TB
 ## Key Components
 
 ### Client Environment
-- **Client Application**: Initiates and manages training jobs
-- **Configuration**: Contains settings for training and security
+* **Client Application**: Initiates and manages training jobs
+* **Configuration**: Contains settings for training and security
 
 ### Secure Environment
-- **Attestation Service**: Verifies the integrity of the computing environment
-- **Key Vault**: Manages encryption keys and secrets
-- **Secure Storage**: Stores encrypted data and models
+* **Attestation Service**: Verifies the integrity of the computing environment
+* **Key Vault**: Manages encryption keys and secrets
+* **Secure Storage**: Stores encrypted data and models
 
 ### Confidential Computing
-- **Confidential VM**: Provides hardware-level isolation
-- **Secure Enclave**: Protected memory region for sensitive operations
-- **ML Model**: The machine learning model being trained
-- **Encrypted Data**: Training data protected by encryption
+* **Confidential VM**: Provides hardware-level isolation
+* **Secure Enclave**: Protected memory region for sensitive operations
+* **ML Model**: The machine learning model being trained
+* **Encrypted Data**: Training data protected by encryption
 
 ## Security Features
 
 1. **Hardware-level Protection**
-   - AMD SEV-SNP for VM isolation
-   - Secure enclaves for sensitive operations
+   * AMD SEV-SNP for VM isolation
+   * Secure enclaves for sensitive operations
 
 2. **Data Protection**
-   - End-to-end encryption
-   - Secure key management
-   - Encrypted storage
+   * End-to-end encryption
+   * Secure key management
+   * Encrypted storage
 
 3. **Access Control**
-   - Role-based access control (RBAC)
-   - Network security rules
-   - Authentication and authorization
-
-4. **Monitoring and Alerting**
-   - Real-time security monitoring
-   - Automated alerting
-   - Security event tracking
+   * Role-based access control (RBAC)
+   * Network security rules
+   * Authentication and authorization
 
 ## Integration Points
 
 1. **Client Integration**
-   - REST API for job management
-   - Secure configuration management
-   - Status monitoring
+   * REST API for job management
+   * Secure configuration management
+   * Status monitoring
 
 2. **Azure Services Integration**
-   - Azure Key Vault for key management
-   - Azure Storage for data storage
-   - Azure Monitor for security monitoring
-
-3. **Security Integration**
-   - Azure Security Center
-   - Azure Sentinel
-   - Custom security monitoring
+   * Azure Key Vault for key management
+   * Azure Storage for data storage
+   * Azure Monitor for security monitoring
 
 ## Deployment Considerations
 
 1. **Resource Requirements**
-   - Confidential computing capable VMs
-   - Sufficient storage for encrypted data
-   - Network bandwidth for secure communication
+   * Confidential computing capable VMs
+   * Sufficient storage for encrypted data
+   * Network bandwidth for secure communication
 
 2. **Security Requirements**
-   - Azure AD integration
-   - Network security groups
-   - Key rotation policies
+   * Azure AD integration
+   * Network security groups
+   * Key rotation policies
 
 3. **Monitoring Requirements**
-   - Security event logging
-   - Performance monitoring
-   - Resource utilization tracking
+   * Security event logging
+   * Performance monitoring
+   * Resource utilization tracking
 
 ## 1. High-Level Architecture Overview
 
