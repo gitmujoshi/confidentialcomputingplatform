@@ -7,20 +7,20 @@ The confidential computing system is designed to provide secure machine learning
 ## Architecture Diagram
 
 ```mermaid
-graph TB
-    subgraph "Client Environment"
+flowchart TB
+    subgraph ClientEnvironment["Client Environment"]
         Client[Client Application]
         Config[Configuration]
     end
 
-    subgraph "Azure Cloud"
-        subgraph "Secure Environment"
+    subgraph AzureCloud["Azure Cloud"]
+        subgraph SecureEnvironment["Secure Environment"]
             Attest[Attestation Service]
             KeyVault[Key Vault]
             Storage[Secure Storage]
         end
 
-        subgraph "Confidential Computing"
+        subgraph ConfidentialComputing["Confidential Computing"]
             VM[Confidential VM]
             Enclave[Secure Enclave]
             Model[ML Model]
@@ -28,53 +28,44 @@ graph TB
         end
     end
 
-    %% Client Interactions
     Client -->|1. Request Training| VM
     Config -->|2. Load Config| VM
-
-    %% Environment Verification
     VM -->|3. Request Attestation| Attest
     Attest -->|4. Verify Environment| VM
-
-    %% Resource Access
     VM -->|5. Request Keys| KeyVault
     KeyVault -->|6. Provide Keys| Enclave
     VM -->|7. Request Data| Storage
     Storage -->|8. Provide Data| Data
-
-    %% Training Process
     Data -->|9. Load Data| Enclave
     Enclave -->|10. Train Model| Model
     Model -->|11. Save Model| Storage
-
-    %% Completion
     Storage -->|12. Training Complete| Client
 
-    classDef azure fill:#0072C6,stroke:#333,stroke-width:2px,color:white;
-    classDef secure fill:#107C10,stroke:#333,stroke-width:2px,color:white;
-    classDef client fill:#FFB900,stroke:#333,stroke-width:2px,color:black;
+    classDef azure fill:#0072C6,stroke:#333,stroke-width:2px,color:white
+    classDef secure fill:#107C10,stroke:#333,stroke-width:2px,color:white
+    classDef client fill:#FFB900,stroke:#333,stroke-width:2px,color:black
 
-    class Client,Config client;
-    class Attest,KeyVault,Storage secure;
-    class VM,Enclave,Model,Data azure;
+    class Client,Config client
+    class Attest,KeyVault,Storage secure
+    class VM,Enclave,Model,Data azure
 ```
 
 ## Key Components
 
-### Client Environment
-* **Client Application**: Initiates and manages training jobs
-* **Configuration**: Contains settings for training and security
+* **Client Environment**
+  * Client Application: Initiates and manages training jobs
+  * Configuration: Contains settings for training and security
 
-### Secure Environment
-* **Attestation Service**: Verifies the integrity of the computing environment
-* **Key Vault**: Manages encryption keys and secrets
-* **Secure Storage**: Stores encrypted data and models
+* **Secure Environment**
+  * Attestation Service: Verifies the integrity of the computing environment
+  * Key Vault: Manages encryption keys and secrets
+  * Secure Storage: Stores encrypted data and models
 
-### Confidential Computing
-* **Confidential VM**: Provides hardware-level isolation
-* **Secure Enclave**: Protected memory region for sensitive operations
-* **ML Model**: The machine learning model being trained
-* **Encrypted Data**: Training data protected by encryption
+* **Confidential Computing**
+  * Confidential VM: Provides hardware-level isolation
+  * Secure Enclave: Protected memory region for sensitive operations
+  * ML Model: The machine learning model being trained
+  * Encrypted Data: Training data protected by encryption
 
 ## Security Features
 
