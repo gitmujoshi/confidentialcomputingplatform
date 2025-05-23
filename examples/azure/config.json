@@ -1,34 +1,39 @@
 {
-    "resource_group_name": "secure-training-rg",
-    "workspace_name": "secure-training-workspace",
-    "key_vault_name": "secure-training-kv",
-    "storage_account_name": "securetrainingstorage",
-    "container_name": "training-data",
+    "subscription_id": "your-subscription-id",
+    "resource_group_name": "your-resource-group",
+    "location": "eastus",
+    "workspace_name": "your-workspace",
+    
+    "key_vault_name": "your-key-vault",
+    "storage_account_name": "yourstorageaccount",
+    "container_name": "secure-training",
+    "attestation_endpoint": "your-attestation-endpoint.attest.azure.net",
     
     "data": {
-        "train_data_path": "data/train.enc",
-        "val_data_path": "data/val.enc",
-        "data_key_name": "training-data-key"
+        "train_data_path": "data/encrypted/train.enc",
+        "val_data_path": "data/encrypted/val.enc",
+        "key_name": "training-data-key",
+        "model_key_name": "model-encryption-key"
     },
     
     "training": {
-        "batch_size": 32,
-        "learning_rate": 0.001,
-        "epochs": 10,
         "input_size": 784,
         "hidden_size": 512,
         "output_size": 10,
+        "batch_size": 32,
+        "learning_rate": 0.001,
+        "epochs": 10,
         "log_interval": 10
     },
     
     "security": {
-        "attestation": {
-            "enabled": true,
-            "verify_claims": true
-        },
         "encryption": {
-            "algorithm": "AES-256-GCM",
-            "key_rotation_days": 30
+            "algorithm": "AES256",
+            "key_size": 256
+        },
+        "attestation": {
+            "type": "SGX",
+            "policy": "default"
         }
     },
     

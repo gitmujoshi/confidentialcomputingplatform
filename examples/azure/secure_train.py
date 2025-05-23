@@ -8,8 +8,7 @@ import base64
 import azure.identity
 import azure.keyvault.keys
 import azure.storage.blob
-import azure.confidentialcomputing
-import azure.confidentialcomputing.models
+import azure.security.attestation
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -59,8 +58,9 @@ class SecureEnvironment:
             credential=self.credential
         )
         
-        # Confidential Computing client
-        self.acc_client = azure.confidentialcomputing.ConfidentialComputingClient(
+        # Attestation client
+        self.attestation_client = azure.security.attestation.AttestationClient(
+            endpoint=f"https://{self.config['attestation_endpoint']}",
             credential=self.credential
         )
         
@@ -97,7 +97,7 @@ class SecureEnvironment:
         """Perform remote attestation."""
         try:
             # Get attestation token
-            attestation_token = self.acc_client.get_attestation_token(
+            attestation_token = self.attestation_client.get_attestation_token(
                 resource_group_name=self.config["resource_group_name"],
                 workspace_name=self.config["workspace_name"]
             )
