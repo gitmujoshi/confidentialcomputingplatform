@@ -245,7 +245,7 @@ The security monitoring system provides comprehensive protection for the confide
 ## Security Monitoring Diagram
 
 ```mermaid
-flowchart LR
+graph LR
     subgraph SecurityMonitoring["Security Monitoring"]
         Monitor[Security Monitor]
         Alert[Alert System]
@@ -265,22 +265,22 @@ flowchart LR
         Config[Configuration]
     end
 
-    Monitor --> VM["Monitor Resources"]
-    Monitor --> Storage["Monitor Resources"]
-    Monitor --> KV["Monitor Resources"]
-    Monitor --> NSG["Monitor Resources"]
+    Monitor --> VM
+    Monitor --> Storage
+    Monitor --> KV
+    Monitor --> NSG
 
-    VM --> Auth["Report Events"]
-    Storage --> Access["Report Events"]
-    KV --> Access["Report Events"]
-    NSG --> Network["Report Events"]
+    VM --> Auth
+    Storage --> Access
+    KV --> Access
+    NSG --> Network
 
-    Auth --> Monitor["Report Events"]
-    Access --> Monitor["Report Events"]
-    Network --> Monitor["Report Events"]
-    Config --> Monitor["Report Events"]
+    Auth --> Monitor
+    Access --> Monitor
+    Network --> Monitor
+    Config --> Monitor
 
-    Monitor --> Alert["Trigger Alert"]
+    Monitor --> Alert
 
     classDef monitor fill:#0072C6,stroke:#333,stroke-width:2px,color:white
     classDef resource fill:#107C10,stroke:#333,stroke-width:2px,color:white

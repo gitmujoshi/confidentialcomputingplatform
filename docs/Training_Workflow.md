@@ -8,6 +8,7 @@ The secure training workflow ensures that machine learning model training is per
 
 ```mermaid
 sequenceDiagram
+    autonumber
     participant Client
     participant VM as Confidential VM
     participant Attest as Attestation Service
