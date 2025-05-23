@@ -1,0 +1,50 @@
+graph LR
+    subgraph "Security Monitoring"
+        Monitor[Security Monitor]
+        Alert[Alert System]
+        Remediate[Remediation Service]
+    end
+
+    subgraph "Azure Resources"
+        VM[Confidential VM]
+        Storage[Secure Storage]
+        KV[Key Vault]
+        NSG[Network Security]
+    end
+
+    subgraph "Security Events"
+        Auth[Authentication]
+        Access[Access Control]
+        Network[Network Activity]
+        Config[Configuration]
+    end
+
+    Monitor -->|1. Monitor| VM
+    Monitor -->|2. Monitor| Storage
+    Monitor -->|3. Monitor| KV
+    Monitor -->|4. Monitor| NSG
+
+    VM -->|5. Events| Auth
+    Storage -->|6. Events| Access
+    KV -->|7. Events| Access
+    NSG -->|8. Events| Network
+
+    Auth -->|9. Report| Monitor
+    Access -->|10. Report| Monitor
+    Network -->|11. Report| Monitor
+    Config -->|12. Report| Monitor
+
+    Monitor -->|13. Trigger| Alert
+    Alert -->|14. Notify| Remediate
+    Remediate -->|15. Fix| VM
+    Remediate -->|16. Fix| Storage
+    Remediate -->|17. Fix| KV
+    Remediate -->|18. Fix| NSG
+
+    classDef monitor fill:#0072C6,stroke:#333,stroke-width:2px,color:white;
+    classDef resource fill:#107C10,stroke:#333,stroke-width:2px,color:white;
+    classDef event fill:#FFB900,stroke:#333,stroke-width:2px,color:black;
+
+    class Monitor,Alert,Remediate monitor;
+    class VM,Storage,KV,NSG resource;
+    class Auth,Access,Network,Config event; 

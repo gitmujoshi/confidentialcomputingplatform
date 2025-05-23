@@ -236,4 +236,163 @@ This document outlines the implementation design for secure machine learning tra
 - Performance impact
 - Cost implications
 - Management overhead
-- Security trade-offs 
+- Security trade-offs
+
+## Security Monitoring Architecture
+
+The security monitoring system provides comprehensive protection for the confidential computing environment through continuous monitoring, alerting, and automated remediation.
+
+## Security Monitoring Diagram
+
+```mermaid
+graph LR
+    subgraph "Security Monitoring"
+        Monitor[Security Monitor]
+        Alert[Alert System]
+        Remediate[Remediation Service]
+    end
+
+    subgraph "Azure Resources"
+        VM[Confidential VM]
+        Storage[Secure Storage]
+        KV[Key Vault]
+        NSG[Network Security]
+    end
+
+    subgraph "Security Events"
+        Auth[Authentication]
+        Access[Access Control]
+        Network[Network Activity]
+        Config[Configuration]
+    end
+
+    Monitor -->|1. Monitor| VM
+    Monitor -->|2. Monitor| Storage
+    Monitor -->|3. Monitor| KV
+    Monitor -->|4. Monitor| NSG
+
+    VM -->|5. Events| Auth
+    Storage -->|6. Events| Access
+    KV -->|7. Events| Access
+    NSG -->|8. Events| Network
+
+    Auth -->|9. Report| Monitor
+    Access -->|10. Report| Monitor
+    Network -->|11. Report| Monitor
+    Config -->|12. Report| Monitor
+
+    Monitor -->|13. Trigger| Alert
+    Alert -->|14. Notify| Remediate
+    Remediate -->|15. Fix| VM
+    Remediate -->|16. Fix| Storage
+    Remediate -->|17. Fix| KV
+    Remediate -->|18. Fix| NSG
+
+    classDef monitor fill:#0072C6,stroke:#333,stroke-width:2px,color:white;
+    classDef resource fill:#107C10,stroke:#333,stroke-width:2px,color:white;
+    classDef event fill:#FFB900,stroke:#333,stroke-width:2px,color:black;
+
+    class Monitor,Alert,Remediate monitor;
+    class VM,Storage,KV,NSG resource;
+    class Auth,Access,Network,Config event;
+```
+
+## Monitoring Components
+
+1. **Security Monitor**
+   - Real-time monitoring of all resources
+   - Event collection and analysis
+   - Security posture assessment
+
+2. **Alert System**
+   - Event-based alerting
+   - Severity classification
+   - Notification routing
+
+3. **Remediation Service**
+   - Automated issue resolution
+   - Security policy enforcement
+   - Configuration management
+
+## Monitored Resources
+
+1. **Confidential VM**
+   - CPU and memory usage
+   - Process monitoring
+   - Security events
+
+2. **Secure Storage**
+   - Access patterns
+   - Encryption status
+   - Data integrity
+
+3. **Key Vault**
+   - Key usage
+   - Access attempts
+   - Policy compliance
+
+4. **Network Security**
+   - Traffic patterns
+   - Rule effectiveness
+   - Threat detection
+
+## Security Events
+
+1. **Authentication Events**
+   - Login attempts
+   - Token validation
+   - Session management
+
+2. **Access Control Events**
+   - Permission changes
+   - Resource access
+   - Policy violations
+
+3. **Network Events**
+   - Connection attempts
+   - Traffic anomalies
+   - Protocol violations
+
+4. **Configuration Events**
+   - Setting changes
+   - Policy updates
+   - Resource modifications
+
+## Implementation Details
+
+1. **Monitoring System**
+   - Azure Monitor integration
+   - Custom metrics collection
+   - Event correlation
+
+2. **Alerting System**
+   - Multi-channel notifications
+   - Severity-based routing
+   - Alert aggregation
+
+3. **Remediation System**
+   - Automated fixes
+   - Policy enforcement
+   - Configuration management
+
+## Best Practices
+
+1. **Monitoring**
+   - Comprehensive coverage
+   - Real-time analysis
+   - Historical tracking
+
+2. **Alerting**
+   - Clear prioritization
+   - Actionable alerts
+   - Minimal false positives
+
+3. **Remediation**
+   - Automated responses
+   - Safe rollback
+   - Audit trail
+
+4. **Maintenance**
+   - Regular updates
+   - Performance optimization
+   - Capacity planning 

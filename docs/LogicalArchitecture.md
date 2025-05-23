@@ -1,5 +1,147 @@
 # Confidential Computing Platform - Logical Architecture
 
+## System Overview
+
+The confidential computing system is designed to provide secure machine learning training in the cloud. The architecture ensures data privacy and model security through multiple layers of protection.
+
+## Architecture Diagram
+
+```mermaid
+graph TB
+    subgraph "Client Environment"
+        Client[Client Application]
+        Config[Configuration]
+    end
+
+    subgraph "Azure Cloud"
+        subgraph "Secure Environment"
+            Attest[Attestation Service]
+            KeyVault[Key Vault]
+            Storage[Secure Storage]
+        end
+
+        subgraph "Confidential Computing"
+            VM[Confidential VM]
+            Enclave[Secure Enclave]
+            Model[ML Model]
+            Data[Encrypted Data]
+        end
+
+        subgraph "Security Services"
+            Monitor[Security Monitor]
+            Alert[Alert System]
+            Remediate[Remediation Service]
+        end
+    end
+
+    Client -->|1. Request Training| VM
+    Config -->|2. Load Config| VM
+    VM -->|3. Attest| Attest
+    Attest -->|4. Verify| VM
+    VM -->|5. Get Keys| KeyVault
+    VM -->|6. Load Data| Storage
+    Storage -->|7. Encrypted Data| Data
+    KeyVault -->|8. Decryption Keys| Enclave
+    Data -->|9. Process| Enclave
+    Enclave -->|10. Train| Model
+    Model -->|11. Save| Storage
+    Monitor -->|12. Monitor| VM
+    Monitor -->|13. Monitor| Storage
+    Monitor -->|14. Monitor| KeyVault
+    Monitor -->|15. Alert| Alert
+    Alert -->|16. Trigger| Remediate
+    Remediate -->|17. Fix Issues| VM
+    Remediate -->|18. Fix Issues| Storage
+    Remediate -->|19. Fix Issues| KeyVault
+
+    classDef azure fill:#0072C6,stroke:#333,stroke-width:2px,color:white;
+    classDef secure fill:#107C10,stroke:#333,stroke-width:2px,color:white;
+    classDef client fill:#FFB900,stroke:#333,stroke-width:2px,color:black;
+    classDef security fill:#E81123,stroke:#333,stroke-width:2px,color:white;
+
+    class Client,Config client;
+    class Attest,KeyVault,Storage secure;
+    class VM,Enclave,Model,Data azure;
+    class Monitor,Alert,Remediate security;
+```
+
+## Key Components
+
+### Client Environment
+- **Client Application**: Initiates and manages training jobs
+- **Configuration**: Contains settings for training and security
+
+### Secure Environment
+- **Attestation Service**: Verifies the integrity of the computing environment
+- **Key Vault**: Manages encryption keys and secrets
+- **Secure Storage**: Stores encrypted data and models
+
+### Confidential Computing
+- **Confidential VM**: Provides hardware-level isolation
+- **Secure Enclave**: Protected memory region for sensitive operations
+- **ML Model**: The machine learning model being trained
+- **Encrypted Data**: Training data protected by encryption
+
+### Security Services
+- **Security Monitor**: Continuously monitors system security
+- **Alert System**: Notifies of security events
+- **Remediation Service**: Automatically fixes security issues
+
+## Security Features
+
+1. **Hardware-level Protection**
+   - AMD SEV-SNP for VM isolation
+   - Secure enclaves for sensitive operations
+
+2. **Data Protection**
+   - End-to-end encryption
+   - Secure key management
+   - Encrypted storage
+
+3. **Access Control**
+   - Role-based access control (RBAC)
+   - Network security rules
+   - Authentication and authorization
+
+4. **Monitoring and Remediation**
+   - Real-time security monitoring
+   - Automated alerting
+   - Automatic remediation of security issues
+
+## Integration Points
+
+1. **Client Integration**
+   - REST API for job management
+   - Secure configuration management
+   - Status monitoring
+
+2. **Azure Services Integration**
+   - Azure Key Vault for key management
+   - Azure Storage for data storage
+   - Azure Monitor for security monitoring
+
+3. **Security Integration**
+   - Azure Security Center
+   - Azure Sentinel
+   - Custom security monitoring
+
+## Deployment Considerations
+
+1. **Resource Requirements**
+   - Confidential computing capable VMs
+   - Sufficient storage for encrypted data
+   - Network bandwidth for secure communication
+
+2. **Security Requirements**
+   - Azure AD integration
+   - Network security groups
+   - Key rotation policies
+
+3. **Monitoring Requirements**
+   - Security event logging
+   - Performance monitoring
+   - Resource utilization tracking
+
 ## 1. High-Level Architecture Overview
 
 ### 1.1 Core Principles

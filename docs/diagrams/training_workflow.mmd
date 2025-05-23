@@ -1,0 +1,29 @@
+sequenceDiagram
+    participant Client
+    participant VM as Confidential VM
+    participant Attest as Attestation Service
+    participant KV as Key Vault
+    participant Storage
+    participant Enclave
+    participant Monitor
+
+    Client->>VM: 1. Initialize Training
+    VM->>Attest: 2. Request Attestation
+    Attest->>VM: 3. Verify Environment
+    VM->>KV: 4. Request Encryption Keys
+    KV->>VM: 5. Provide Keys
+    VM->>Storage: 6. Request Training Data
+    Storage->>VM: 7. Provide Encrypted Data
+    VM->>Enclave: 8. Load Data & Keys
+    Enclave->>Enclave: 9. Decrypt Data
+    loop Training Epochs
+        Enclave->>Enclave: 10. Train Model
+        Enclave->>Storage: 11. Save Checkpoint
+        Monitor->>Enclave: 12. Monitor Progress
+    end
+    Enclave->>Storage: 13. Save Final Model
+    Storage->>Client: 14. Training Complete
+
+    Note over Client,Storage: Secure Training Workflow
+    Note over Enclave: All sensitive operations<br/>performed in secure enclave
+    Note over Monitor: Continuous security monitoring 

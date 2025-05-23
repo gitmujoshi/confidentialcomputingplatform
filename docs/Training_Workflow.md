@@ -1,7 +1,140 @@
 # Secure Training Workflow
 
 ## Overview
-This document describes the workflow for secure machine learning training, independent of specific cloud providers.
+
+The secure training workflow ensures that machine learning model training is performed in a confidential computing environment with proper security controls and monitoring.
+
+## Training Workflow Diagram
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant VM as Confidential VM
+    participant Attest as Attestation Service
+    participant KV as Key Vault
+    participant Storage
+    participant Enclave
+    participant Monitor
+
+    Client->>VM: 1. Initialize Training
+    VM->>Attest: 2. Request Attestation
+    Attest->>VM: 3. Verify Environment
+    VM->>KV: 4. Request Encryption Keys
+    KV->>VM: 5. Provide Keys
+    VM->>Storage: 6. Request Training Data
+    Storage->>VM: 7. Provide Encrypted Data
+    VM->>Enclave: 8. Load Data & Keys
+    Enclave->>Enclave: 9. Decrypt Data
+    loop Training Epochs
+        Enclave->>Enclave: 10. Train Model
+        Enclave->>Storage: 11. Save Checkpoint
+        Monitor->>Enclave: 12. Monitor Progress
+    end
+    Enclave->>Storage: 13. Save Final Model
+    Storage->>Client: 14. Training Complete
+
+    Note over Client,Storage: Secure Training Workflow
+    Note over Enclave: All sensitive operations<br/>performed in secure enclave
+    Note over Monitor: Continuous security monitoring
+```
+
+## Workflow Steps
+
+1. **Initialization**
+   - Client initiates training job
+   - Configuration is loaded
+   - Environment is prepared
+
+2. **Environment Verification**
+   - Attestation request is made
+   - Environment integrity is verified
+   - Security posture is validated
+
+3. **Resource Access**
+   - Encryption keys are retrieved
+   - Training data is loaded
+   - Secure environment is established
+
+4. **Training Process**
+   - Data is decrypted in secure enclave
+   - Model training is performed
+   - Checkpoints are saved securely
+
+5. **Monitoring and Security**
+   - Progress is monitored
+   - Security events are tracked
+   - Alerts are generated if needed
+
+6. **Completion**
+   - Final model is saved
+   - Resources are cleaned up
+   - Results are returned to client
+
+## Security Considerations
+
+1. **Data Protection**
+   - All data is encrypted at rest
+   - Data is only decrypted in secure enclave
+   - Keys are managed by Key Vault
+
+2. **Environment Security**
+   - Hardware-level isolation
+   - Secure enclave protection
+   - Network security controls
+
+3. **Access Control**
+   - Role-based access
+   - Least privilege principle
+   - Secure authentication
+
+4. **Monitoring**
+   - Real-time security monitoring
+   - Performance tracking
+   - Resource utilization
+
+## Implementation Details
+
+1. **Client Side**
+   - Secure configuration management
+   - Job status monitoring
+   - Result retrieval
+
+2. **Server Side**
+   - Secure environment setup
+   - Resource management
+   - Security enforcement
+
+3. **Storage**
+   - Encrypted data storage
+   - Secure checkpointing
+   - Model versioning
+
+4. **Monitoring**
+   - Security event logging
+   - Performance metrics
+   - Resource tracking
+
+## Best Practices
+
+1. **Security**
+   - Regular key rotation
+   - Security updates
+   - Access review
+
+2. **Performance**
+   - Resource optimization
+   - Batch processing
+   - Caching strategies
+
+3. **Monitoring**
+   - Regular health checks
+   - Performance monitoring
+   - Security scanning
+
+4. **Maintenance**
+   - Regular updates
+   - Backup procedures
+   - Disaster recovery
 
 ## Workflow Stages
 
