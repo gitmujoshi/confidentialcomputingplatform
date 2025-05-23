@@ -1,0 +1,38 @@
+{
+    "aws": {
+        "region": "us-west-2",
+        "kms_key_id": "arn:aws:kms:us-west-2:123456789012:key/your-key-id",
+        "sagemaker_role": "arn:aws:iam::123456789012:role/SageMakerExecutionRole"
+    },
+    "storage": {
+        "bucket_name": "secure-training-data",
+        "encryption": {
+            "type": "aws:kms",
+            "kms_key_id": "arn:aws:kms:us-west-2:123456789012:key/your-key-id"
+        }
+    },
+    "training": {
+        "instance_type": "ml.g4dn.xlarge",
+        "instance_count": 1,
+        "volume_size": 100,
+        "max_runtime_in_seconds": 3600,
+        "encryption": {
+            "type": "aws:kms",
+            "kms_key_id": "arn:aws:kms:us-west-2:123456789012:key/your-key-id"
+        }
+    },
+    "logging": {
+        "level": "INFO",
+        "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    },
+    "security": {
+        "vpc_config": {
+            "subnets": ["subnet-12345678", "subnet-87654321"],
+            "security_groups": ["sg-12345678"]
+        },
+        "encryption": {
+            "in_transit": true,
+            "at_rest": true
+        }
+    }
+} 

@@ -1,0 +1,28 @@
+{
+    "compartment_id": "ocid1.compartment.oc1..example",
+    "subnet_id": "ocid1.subnet.oc1..example",
+    "instance_shape": "BM.Standard.E4.128",
+    "training": {
+        "input_size": 784,
+        "hidden_size": 512,
+        "output_size": 10,
+        "batch_size": 32,
+        "learning_rate": 0.001,
+        "epochs": 10,
+        "log_interval": 10
+    },
+    "data": {
+        "train_data_path": "/data/training/train",
+        "val_data_path": "/data/training/val",
+        "encryption_key_id": "ocid1.key.oc1..example"
+    },
+    "storage": {
+        "bucket_name": "secure-training-bucket",
+        "namespace": "example-namespace",
+        "model_path": "models/secure_model"
+    },
+    "logging": {
+        "level": "INFO",
+        "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    }
+} 
