@@ -30,29 +30,45 @@ graph TB
         subgraph "Security Services"
             Monitor[Security Monitor]
             Alert[Alert System]
-            Remediate[Remediation Service]
         end
     end
 
+    %% Client Interactions
     Client -->|1. Request Training| VM
     Config -->|2. Load Config| VM
-    VM -->|3. Attest| Attest
-    Attest -->|4. Verify| VM
-    VM -->|5. Get Keys| KeyVault
-    VM -->|6. Load Data| Storage
-    Storage -->|7. Encrypted Data| Data
-    KeyVault -->|8. Decryption Keys| Enclave
-    Data -->|9. Process| Enclave
-    Enclave -->|10. Train| Model
-    Model -->|11. Save| Storage
-    Monitor -->|12. Monitor| VM
-    Monitor -->|13. Monitor| Storage
-    Monitor -->|14. Monitor| KeyVault
-    Monitor -->|15. Alert| Alert
-    Alert -->|16. Trigger| Remediate
-    Remediate -->|17. Fix Issues| VM
-    Remediate -->|18. Fix Issues| Storage
-    Remediate -->|19. Fix Issues| KeyVault
+
+    %% Environment Verification
+    VM -->|3. Request Attestation| Attest
+    Attest -->|4. Verify Environment| VM
+
+    %% Resource Access
+    VM -->|5. Request Keys| KeyVault
+    KeyVault -->|6. Provide Keys| Enclave
+    VM -->|7. Request Data| Storage
+    Storage -->|8. Provide Data| Data
+
+    %% Training Process
+    Data -->|9. Load Data| Enclave
+    Enclave -->|10. Train Model| Model
+    Model -->|11. Save Model| Storage
+
+    %% Security Monitoring
+    Monitor -->|12. Monitor Resources| VM
+    Monitor -->|13. Monitor Resources| Storage
+    Monitor -->|14. Monitor Resources| KeyVault
+    Monitor -->|15. Monitor Resources| Enclave
+
+    %% Security Events
+    VM -->|16. Report Events| Monitor
+    Storage -->|17. Report Events| Monitor
+    KeyVault -->|18. Report Events| Monitor
+    Enclave -->|19. Report Events| Monitor
+
+    %% Alert System
+    Monitor -->|20. Trigger Alert| Alert
+
+    %% Completion
+    Storage -->|21. Training Complete| Client
 
     classDef azure fill:#0072C6,stroke:#333,stroke-width:2px,color:white;
     classDef secure fill:#107C10,stroke:#333,stroke-width:2px,color:white;
@@ -62,7 +78,7 @@ graph TB
     class Client,Config client;
     class Attest,KeyVault,Storage secure;
     class VM,Enclave,Model,Data azure;
-    class Monitor,Alert,Remediate security;
+    class Monitor,Alert security;
 ```
 
 ## Key Components
@@ -85,7 +101,6 @@ graph TB
 ### Security Services
 - **Security Monitor**: Continuously monitors system security
 - **Alert System**: Notifies of security events
-- **Remediation Service**: Automatically fixes security issues
 
 ## Security Features
 
