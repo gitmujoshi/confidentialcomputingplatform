@@ -28,18 +28,18 @@ flowchart TB
         end
     end
 
-    Client --->|1. Request Training| VM
-    Config --->|2. Load Config| VM
-    VM --->|3. Request Attestation| Attest
-    Attest --->|4. Verify Environment| VM
-    VM --->|5. Request Keys| KeyVault
-    KeyVault --->|6. Provide Keys| Enclave
-    VM --->|7. Request Data| Storage
-    Storage --->|8. Provide Data| Data
-    Data --->|9. Load Data| Enclave
-    Enclave --->|10. Train Model| Model
-    Model --->|11. Save Model| Storage
-    Storage --->|12. Training Complete| Client
+    Client --> VM["1. Request Training"]
+    Config --> VM["2. Load Config"]
+    VM --> Attest["3. Request Attestation"]
+    Attest --> VM["4. Verify Environment"]
+    VM --> KeyVault["5. Request Keys"]
+    KeyVault --> Enclave["6. Provide Keys"]
+    VM --> Storage["7. Request Data"]
+    Storage --> Data["8. Provide Data"]
+    Data --> Enclave["9. Load Data"]
+    Enclave --> Model["10. Train Model"]
+    Model --> Storage["11. Save Model"]
+    Storage --> Client["12. Training Complete"]
 
     classDef azure fill:#0072C6,stroke:#333,stroke-width:2px,color:white
     classDef secure fill:#107C10,stroke:#333,stroke-width:2px,color:white
