@@ -244,52 +244,56 @@ The security monitoring system provides comprehensive protection for the confide
 
 ## Security Monitoring Diagram
 
+The following diagram illustrates the security monitoring architecture:
+
 ```mermaid
 graph LR
-    subgraph SecurityMonitoring["Security Monitoring"]
-        Monitor[Security Monitor]
-        Alert[Alert System]
-    end
+subgraph SecurityMonitoring["Security Monitoring"]
+Monitor[Security Monitor]
+Alert[Alert System]
+end
 
-    subgraph AzureResources["Azure Resources"]
-        VM[Confidential VM]
-        Storage[Secure Storage]
-        KV[Key Vault]
-        NSG[Network Security]
-    end
+subgraph AzureResources["Azure Resources"]
+VM[Confidential VM]
+Storage[Secure Storage]
+KV[Key Vault]
+NSG[Network Security]
+end
 
-    subgraph SecurityEvents["Security Events"]
-        Auth[Authentication]
-        Access[Access Control]
-        Network[Network Activity]
-        Config[Configuration]
-    end
+subgraph SecurityEvents["Security Events"]
+Auth[Authentication]
+Access[Access Control]
+Network[Network Activity]
+Config[Configuration]
+end
 
-    Monitor --> VM
-    Monitor --> Storage
-    Monitor --> KV
-    Monitor --> NSG
+Monitor --> VM
+Monitor --> Storage
+Monitor --> KV
+Monitor --> NSG
 
-    VM --> Auth
-    Storage --> Access
-    KV --> Access
-    NSG --> Network
+VM --> Auth
+Storage --> Access
+KV --> Access
+NSG --> Network
 
-    Auth --> Monitor
-    Access --> Monitor
-    Network --> Monitor
-    Config --> Monitor
+Auth --> Monitor
+Access --> Monitor
+Network --> Monitor
+Config --> Monitor
 
-    Monitor --> Alert
+Monitor --> Alert
 
-    classDef monitor fill:#0072C6,stroke:#333,stroke-width:2px,color:white
-    classDef resource fill:#107C10,stroke:#333,stroke-width:2px,color:white
-    classDef event fill:#FFB900,stroke:#333,stroke-width:2px,color:black
+classDef monitor fill:#0072C6,stroke:#333,stroke-width:2px,color:white
+classDef resource fill:#107C10,stroke:#333,stroke-width:2px,color:white
+classDef event fill:#FFB900,stroke:#333,stroke-width:2px,color:black
 
-    class Monitor,Alert monitor
-    class VM,Storage,KV,NSG resource
-    class Auth,Access,Network,Config event
+class Monitor,Alert monitor
+class VM,Storage,KV,NSG resource
+class Auth,Access,Network,Config event
 ```
+
+The monitoring system consists of the following components:
 
 ## Monitoring Components
 

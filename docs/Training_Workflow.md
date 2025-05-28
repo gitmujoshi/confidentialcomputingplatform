@@ -6,38 +6,42 @@ The secure training workflow ensures that machine learning model training is per
 
 ## Training Workflow Diagram
 
+The following diagram illustrates the secure training workflow:
+
 ```mermaid
 sequenceDiagram
-    autonumber
-    participant Client
-    participant VM as Confidential VM
-    participant Attest as Attestation Service
-    participant KV as Key Vault
-    participant Storage
-    participant Enclave
-    participant Monitor
+autonumber
+participant Client
+participant VM as Confidential VM
+participant Attest as Attestation Service
+participant KV as Key Vault
+participant Storage
+participant Enclave
+participant Monitor
 
-    Client->>VM: Initialize Training
-    VM->>Attest: Request Attestation
-    Attest->>VM: Verify Environment
-    VM->>KV: Request Encryption Keys
-    KV->>VM: Provide Keys
-    VM->>Storage: Request Training Data
-    Storage->>VM: Provide Encrypted Data
-    VM->>Enclave: Load Data & Keys
-    Enclave->>Enclave: Decrypt Data
-    loop Training Epochs
-        Enclave->>Enclave: Train Model
-        Enclave->>Storage: Save Checkpoint
-        Monitor->>Enclave: Monitor Progress
-    end
-    Enclave->>Storage: Save Final Model
-    Storage->>Client: Training Complete
+Client->>VM: Initialize Training
+VM->>Attest: Request Attestation
+Attest->>VM: Verify Environment
+VM->>KV: Request Encryption Keys
+KV->>VM: Provide Keys
+VM->>Storage: Request Training Data
+Storage->>VM: Provide Encrypted Data
+VM->>Enclave: Load Data & Keys
+Enclave->>Enclave: Decrypt Data
+loop Training Epochs
+    Enclave->>Enclave: Train Model
+    Enclave->>Storage: Save Checkpoint
+    Monitor->>Enclave: Monitor Progress
+end
+Enclave->>Storage: Save Final Model
+Storage->>Client: Training Complete
 
-    Note over Client,Storage: Secure Training Workflow
-    Note over Enclave: All sensitive operations<br/>performed in secure enclave
-    Note over Monitor: Continuous security monitoring
+Note over Client,Storage: Secure Training Workflow
+Note over Enclave: All sensitive operations<br/>performed in secure enclave
+Note over Monitor: Continuous security monitoring
 ```
+
+The workflow consists of the following steps:
 
 ## Workflow Steps
 
