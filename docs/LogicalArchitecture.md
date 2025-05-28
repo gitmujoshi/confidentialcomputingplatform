@@ -28,18 +28,18 @@ flowchart TB
         end
     end
 
-    Client --> |"1. Request Training"|VM
-    Config --> VM["2. Load Config"]
-    VM --> Attest["3. Request Attestation"]
-    Attest --> VM["4. Verify Environment"]
-    VM --> KeyVault["5. Request Keys"]
-    KeyVault --> Enclave["6. Provide Keys"]
-    VM --> Storage["7. Request Data"]
-    Storage --> Data["8. Provide Data"]
-    Data --> Enclave["9. Load Data"]
-    Enclave --> Model["10. Train Model"]
-    Model --> Storage["11. Save Model"]
-    Storage --> Client["12. Training Complete"]
+    Client --> |1\. Request Training|VM
+    Config --> |2\. Load Config|VM
+    VM --> |3\. Request Attestation|Attest
+    Attest --> |4\. Verify Environment|VM
+    VM --> |5\. Request Keys|KeyVault
+    KeyVault --> |6\. Provide Keys|Enclave
+    VM --> |7\. Request Data|Storage
+    Storage --> |8\. Provide Data|Data
+    Data --> |9\. Load Data|Enclave
+    Enclave --> |10\. Train Model|Model
+    Model --> |11\. Save Model|Storage
+    Storage --> |12\. Training Complete|Client
 
     classDef azure fill:#0072C6,stroke:#333,stroke-width:2px,color:white
     classDef secure fill:#107C10,stroke:#333,stroke-width:2px,color:white
@@ -49,6 +49,53 @@ flowchart TB
     class Attest,KeyVault,Storage secure
     class VM,Enclave,Model,Data azure
 ```
+
+### Architecture Diagram Description
+
+The architecture diagram illustrates a secure machine learning training workflow in Azure Cloud, organized into three main sections:
+
+1. **Client Environment**
+   - Contains two components:
+     - Client Application: The main application that initiates training
+     - Configuration: Contains training and security settings
+
+2. **Azure Cloud** (contains two sub-sections)
+   - **Secure Environment**
+     - Attestation Service: Verifies computing environment integrity
+     - Key Vault: Manages encryption keys and secrets
+     - Secure Storage: Stores encrypted data and models
+
+   - **Confidential Computing**
+     - Confidential VM: Provides hardware-level isolation
+     - Secure Enclave: Protected memory region for sensitive operations
+     - ML Model: The machine learning model being trained
+     - Encrypted Data: Training data protected by encryption
+
+The workflow follows a numbered sequence (1-12):
+1. Client requests training
+2. Configuration is loaded into VM
+3. VM requests attestation
+4. Environment is verified
+5. VM requests encryption keys
+6. Keys are provided to enclave
+7. VM requests training data
+8. Encrypted data is provided
+9. Data is loaded into enclave
+10. Model training occurs
+11. Model is saved
+12. Training completion is reported to client
+
+The diagram uses color coding (defined in classDef):
+- Azure components: Blue (#0072C6)
+- Secure components: Green (#107C10)
+- Client components: Yellow (#FFB900)
+
+This architecture ensures:
+- Data privacy through encryption
+- Secure computation in protected enclaves
+- Hardware-level isolation
+- Secure key management
+- End-to-end security in the training process
 
 ## Key Components
 
