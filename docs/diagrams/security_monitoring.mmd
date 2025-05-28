@@ -1,42 +1,42 @@
 graph LR
-    subgraph "Security Monitoring"
-        Monitor[Security Monitor]
-        Alert[Alert System]
-        Remediate[Remediation Service]
-    end
+  subgraph Security_Monitoring
+    Monitor[Security Monitor]
+    Alert[Alert System]
+    Remediate[Remediation Service]
+  end
 
-    subgraph "Azure Resources"
-        VM[Confidential VM]
-        Storage[Secure Storage]
-        KV[Key Vault]
-        NSG[Network Security]
-    end
+  subgraph Azure_Resources
+    VM[Confidential VM]
+    Storage[Secure Storage]
+    KV[Key Vault]
+    NSG[Network Security]
+  end
 
-    subgraph "Security Events"
-        Auth[Authentication]
-        Access[Access Control]
-        Network[Network Activity]
-        Config[Configuration]
-    end
+  subgraph Security_Events
+    Auth[Authentication]
+    Access[Access Control]
+    Network[Network Activity]
+    Config[Configuration]
+  end
 
-    Monitor -->|1. Monitor| VM
-    Monitor -->|2. Monitor| Storage
-    Monitor -->|3. Monitor| KV
-    Monitor -->|4. Monitor| NSG
+  Monitor -->|Monitor| VM
+  Monitor -->|Monitor| Storage
+  Monitor -->|Monitor| KV
+  Monitor -->|Monitor| NSG
 
-    VM -->|5. Events| Auth
-    Storage -->|6. Events| Access
-    KV -->|7. Events| Access
-    NSG -->|8. Events| Network
+  VM -->|Events| Auth
+  Storage -->|Events| Access
+  KV -->|Events| Access
+  NSG -->|Events| Network
 
-    Auth -->|9. Report| Monitor
-    Access -->|10. Report| Monitor
-    Network -->|11. Report| Monitor
-    Config -->|12. Report| Monitor
+  Auth -->|Report| Monitor
+  Access -->|Report| Monitor
+  Network -->|Report| Monitor
+  Config -->|Report| Monitor
 
-    Monitor -->|13. Trigger| Alert
-    Alert -->|14. Notify| Remediate
-    Remediate -->|15. Fix| VM
-    Remediate -->|16. Fix| Storage
-    Remediate -->|17. Fix| KV
-    Remediate -->|18. Fix| NSG 
+  Monitor -->|Trigger| Alert
+  Alert -->|Notify| Remediate
+  Remediate -->|Fix| VM
+  Remediate -->|Fix| Storage
+  Remediate -->|Fix| KV
+  Remediate -->|Fix| NSG
