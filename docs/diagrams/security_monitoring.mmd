@@ -39,12 +39,4 @@ graph LR
     Remediate -->|15. Fix| VM
     Remediate -->|16. Fix| Storage
     Remediate -->|17. Fix| KV
-    Remediate -->|18. Fix| NSG
-
-    classDef monitor fill:#0072C6,stroke:#333,stroke-width:2px,color:white;
-    classDef resource fill:#107C10,stroke:#333,stroke-width:2px,color:white;
-    classDef event fill:#FFB900,stroke:#333,stroke-width:2px,color:black;
-
-    class Monitor,Alert,Remediate monitor;
-    class VM,Storage,KV,NSG resource;
-    class Auth,Access,Network,Config event; 
+    Remediate -->|18. Fix| NSG 

@@ -43,14 +43,4 @@ graph TB
     Alert -->|16. Trigger| Remediate
     Remediate -->|17. Fix Issues| VM
     Remediate -->|18. Fix Issues| Storage
-    Remediate -->|19. Fix Issues| KeyVault
-
-    classDef azure fill:#0072C6,stroke:#333,stroke-width:2px,color:white;
-    classDef secure fill:#107C10,stroke:#333,stroke-width:2px,color:white;
-    classDef client fill:#FFB900,stroke:#333,stroke-width:2px,color:black;
-    classDef security fill:#E81123,stroke:#333,stroke-width:2px,color:white;
-
-    class Client,Config client;
-    class Attest,KeyVault,Storage secure;
-    class VM,Enclave,Model,Data azure;
-    class Monitor,Alert,Remediate security; 
+    Remediate -->|19. Fix Issues| KeyVault 
