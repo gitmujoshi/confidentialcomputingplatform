@@ -30,14 +30,18 @@ graph LR
     KV -->|6\. Provide Keys| VM
     VM -->|7\. Request Data| Storage
     Storage -->|8\. Provide Data| Data
-    VM -->|\. Load Data & Keys| Enclave
+    VM -->|9\. Load Data & Keys| Enclave
     Enclave -->|10\. Decrypt Data| Data
-    Enclave -->|\. Train Model| Model
+    Enclave -->|11\. Train Model| Model
     Model -->|12\. Save Checkpoint| Storage
     Monitor -->|13\. Monitor Progress| Enclave
     Model -->|14\. Save Final Model| Storage
     Storage -->|15\. Training Complete| Client
 
-    Note over Client,Storage: Secure Training Workflow
-    Note over Enclave: All sensitive operations<br/>performed in secure enclave
-    Note over Monitor: Continuous security monitoring 
+    %% Notes as subgraphs
+    subgraph "Notes"
+        direction TB
+        N1[Secure Training Workflow]
+        N2[All sensitive operations performed in secure enclave]
+        N3[Continuous security monitoring]
+    end 

@@ -37,10 +37,10 @@ graph LR
     Enclave -->|10\. Train| Model
     Model -->|11\. Save| Storage
     Monitor -->|12\. Monitor| VM
-    Monitor -->|13. Monitor| Storage
+    Monitor -->|13\. Monitor| Storage
     Monitor -->|14\. Monitor| KeyVault
-    Monitor -->|\. Alert| Alert
+    Monitor -->|15\. Alert| Alert
     Alert -->|16\. Trigger| Remediate
     Remediate -->|17\. Fix Issues| VM
-    Remediate -->|\. Fix Issues| Storage
+    Remediate -->|18\. Fix Issues| Storage
     Remediate -->|19\. Fix Issues| KeyVault 
