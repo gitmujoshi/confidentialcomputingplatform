@@ -1,4 +1,4 @@
-graph TB
+graph LR
     subgraph "Client Environment"
         Client[Client Application]
         Config[Configuration]
@@ -25,22 +25,22 @@ graph TB
         end
     end
 
-    Client -->|1. Request Training| VM
-    Config -->|2. Load Config| VM
-    VM -->|3. Attest| Attest
-    Attest -->|4. Verify| VM
-    VM -->|5. Get Keys| KeyVault
-    VM -->|6. Load Data| Storage
-    Storage -->|7. Encrypted Data| Data
-    KeyVault -->|8. Decryption Keys| Enclave
-    Data -->|9. Process| Enclave
-    Enclave -->|10. Train| Model
-    Model -->|11. Save| Storage
-    Monitor -->|12. Monitor| VM
+    Client -->|1\. Request Training| VM
+    Config -->|2\. Load Config| VM
+    VM -->|3\. Attest| Attest
+    Attest -->|4\. Verify| VM
+    VM -->|5\. Get Keys| KeyVault
+    VM -->|6\. Load Data| Storage
+    Storage -->|7\. Encrypted Data| Data
+    KeyVault -->|8\. Decryption Keys| Enclave
+    Data -->|9\. Process| Enclave
+    Enclave -->|10\. Train| Model
+    Model -->|11\. Save| Storage
+    Monitor -->|12\. Monitor| VM
     Monitor -->|13. Monitor| Storage
-    Monitor -->|14. Monitor| KeyVault
-    Monitor -->|15. Alert| Alert
-    Alert -->|16. Trigger| Remediate
-    Remediate -->|17. Fix Issues| VM
-    Remediate -->|18. Fix Issues| Storage
-    Remediate -->|19. Fix Issues| KeyVault 
+    Monitor -->|14\. Monitor| KeyVault
+    Monitor -->|\. Alert| Alert
+    Alert -->|16\. Trigger| Remediate
+    Remediate -->|17\. Fix Issues| VM
+    Remediate -->|\. Fix Issues| Storage
+    Remediate -->|19\. Fix Issues| KeyVault 
