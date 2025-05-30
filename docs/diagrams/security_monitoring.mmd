@@ -39,13 +39,13 @@ flowchart TB
         end
     end
 
-    EnclaveMonitor --> |1. Monitor|Logging
-    PrivacyMonitor --> |2. Track|Logging
-    PerfMonitor --> |3. Measure|Logging
+    EnclaveMonitor --> |"1\. Monitor"|Logging
+    PrivacyMonitor --> |"2\. Track"|Logging
+    PerfMonitor --> |"3\. Measure"|Logging
 
-    SecurityLogs --> |4. Alert|Monitoring
-    PrivacyLogs --> |5. Report|Monitoring
-    PerfLogs --> |6. Analyze|Monitoring
+    SecurityLogs --> |"4\. Alert"|Monitoring
+    PrivacyLogs --> |"5\. Report"|Monitoring
+    PerfLogs --> |"6\. Analyze"|Monitoring
 
     classDef monitor fill:#FFB900,stroke:#333,stroke-width:2px,color:black
     classDef logging fill:#107C10,stroke:#333,stroke-width:2px,color:white
