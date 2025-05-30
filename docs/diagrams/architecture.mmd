@@ -31,27 +31,27 @@ flowchart TB
         PrivacyMetrics[Privacy Metrics]
     end
 
-    WebClient --> |"1\. Request"|APIClient
-    APIClient --> |"2\. Authenticate"|SecurityLayer
-    Console --> |"3\. Monitor"|SecurityLayer
+    WebClient --> |1\. Request|APIClient
+    APIClient --> |2\. Authenticate|SecurityLayer
+    Console --> |3\. Monitor|SecurityLayer
 
-    SecurityLayer --> |"4\. Process"|DataLayer
-    DataLayer --> |"5\. Update"|SecurityLayer
+    SecurityLayer --> |4\. Process|DataLayer
+    DataLayer --> |5\. Update|SecurityLayer
 
     subgraph SecureEnclaves
-        NitroEnclave --> |"6\. Verify"|Attestation
-        Attestation --> |"7\. Store"|SecureStorage
+        NitroEnclave --> |6\. Verify|Attestation
+        Attestation --> |7\. Store|SecureStorage
     end
 
     subgraph PrivacyPreserving
-        HomomorphicEnc --> |"8\. Encrypt"|ModelParams
-        DifferentialPrivacy --> |"9\. Add Noise"|PrivacyMetrics
-        FederatedLearning --> |"10\. Aggregate"|ModelParams
+        HomomorphicEnc --> |8\. Encrypt|ModelParams
+        DifferentialPrivacy --> |9\. Add Noise|PrivacyMetrics
+        FederatedLearning --> |10\. Aggregate|ModelParams
     end
 
     subgraph MultiPartyComp
-        SecureParty --> |"11\. Share"|SecretSharing
-        SecretSharing --> |"12\. Aggregate"|SecureAgg
+        SecureParty --> |11\. Share|SecretSharing
+        SecretSharing --> |12\. Aggregate|SecureAgg
     end
 
     classDef client fill:#FFB900,stroke:#333,stroke-width:2px,color:black

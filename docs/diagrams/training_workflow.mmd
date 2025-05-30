@@ -31,24 +31,24 @@ flowchart TB
         ModelValidation[Model Validation]
     end
 
-    LoadData --> |"1\. Process"|Preprocess
-    Preprocess --> |"2\. Validate"|Validate
-    Validate --> |"3\. Initialize"|InitEnclave
+    LoadData --> |1\. Process|Preprocess
+    Preprocess --> |2\. Validate|Validate
+    Validate --> |3\. Initialize|InitEnclave
 
-    InitEnclave --> |"4\. Verify"|VerifyAttest
-    VerifyAttest --> |"5\. Load"|LoadKeys
+    InitEnclave --> |4\. Verify|VerifyAttest
+    VerifyAttest --> |5\. Load|LoadKeys
 
-    LoadKeys --> |"6\. Encrypt"|HomomorphicEnc
-    HomomorphicEnc --> |"7\. Add Noise"|DifferentialPrivacy
-    DifferentialPrivacy --> |"8\. Train"|FederatedLearning
+    LoadKeys --> |6\. Encrypt|HomomorphicEnc
+    HomomorphicEnc --> |7\. Add Noise|DifferentialPrivacy
+    DifferentialPrivacy --> |8\. Train|FederatedLearning
 
-    FederatedLearning --> |"9\. Compute"|SecureParty
-    SecureParty --> |"10\. Share"|SecretSharing
-    SecretSharing --> |"11\. Aggregate"|SecureAgg
+    FederatedLearning --> |9\. Compute|SecureParty
+    SecureParty --> |10\. Share|SecretSharing
+    SecretSharing --> |11\. Aggregate|SecureAgg
 
-    SecureAgg --> |"12\. Infer"|SecureInference
-    SecureInference --> |"13\. Measure"|PrivacyMetrics
-    PrivacyMetrics --> |"14\. Validate"|ModelValidation
+    SecureAgg --> |12\. Infer|SecureInference
+    SecureInference --> |13\. Measure|PrivacyMetrics
+    PrivacyMetrics --> |14\. Validate|ModelValidation
 
     classDef prep fill:#FFB900,stroke:#333,stroke-width:2px,color:black
     classDef training fill:#107C10,stroke:#333,stroke-width:2px,color:white
