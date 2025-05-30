@@ -1,11 +1,11 @@
 # OCI Confidential Computing Terraform Example
 
-This directory contains Terraform configurations for deploying a confidential computing environment on Oracle Cloud Infrastructure (OCI).
+This directory contains Terraform configurations for deploying a confidential computing environment on Oracle Cloud Infrastructure (OCI) using AMD SEV.
 
 ## Prerequisites
 
 - OCI account with appropriate permissions
-- OCI CLI configured with API key
+- OCI CLI installed and configured
 - Terraform installed (version 0.12 or later)
 
 ## Configuration
@@ -16,13 +16,15 @@ This directory contains Terraform configurations for deploying a confidential co
    ```
 
 2. Update the variables in `terraform.tfvars` with your OCI-specific values:
-   - `tenancy_ocid`: Your OCI tenancy OCID
-   - `user_ocid`: Your OCI user OCID
-   - `fingerprint`: Your API key fingerprint
-   - `private_key_path`: Path to your OCI API private key
+   - `tenancy_ocid`: OCID of your tenancy
+   - `user_ocid`: OCID of the user calling the API
+   - `fingerprint`: Fingerprint for the key pair
+   - `private_key_path`: Path to your private key file
+   - `region`: OCI region to deploy resources
    - `compartment_id`: OCID of your compartment
    - `image_id`: OCID of the image to use
-   - `ssh_public_key`: Your SSH public key for instance access
+   - `ssh_public_key`: Your SSH public key
+   - `bucket_name`: Name for your Object Storage bucket
 
 ## Deployment
 
@@ -48,17 +50,19 @@ This directory contains Terraform configurations for deploying a confidential co
 - Security List
 - Route Table
 - Internet Gateway
-- Confidential Computing Instance
-- KMS Vault
+- Confidential VM Instance (AMD SEV enabled)
+- Vault and Key
+- Object Storage Bucket
 
-## Outputs
+## Security Features
 
-After successful deployment, Terraform will output:
-- VCN ID
-- Subnet ID
-- Instance ID
-- Instance Public IP
-- Vault ID
+- Uses OCI Confidential Computing with AMD SEV
+- Encrypted boot volumes
+- Secure networking with security lists
+- Vault for key management
+- Object Storage with KMS encryption
+- No public access to storage bucket
+- Versioning enabled for storage
 
 ## Cleanup
 
@@ -67,15 +71,8 @@ To destroy all created resources:
 terraform destroy
 ```
 
-## Security Notes
-
-- The configuration uses OCI's confidential computing capabilities with the `VM.Standard.E4.Flex` shape
-- SSH access is restricted to port 22
-- KMS vault is created for secure key management
-- All resources are created in a dedicated VCN with proper security rules
-
 ## References
 
-- [OCI Confidential Computing Documentation](https://docs.oracle.com/en-us/iaas/Content/confidential-computing/home.htm)
+- [OCI Confidential Computing Documentation](https://docs.oracle.com/en-us/iaas/Content/security/confidential-computing.htm)
 - [OCI Terraform Provider Documentation](https://registry.terraform.io/providers/oracle/oci/latest/docs)
 - [OCI Security Best Practices](https://docs.oracle.com/en-us/iaas/Content/Security/Reference/security_best_practices.htm) 

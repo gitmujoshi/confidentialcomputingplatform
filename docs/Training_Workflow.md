@@ -289,4 +289,30 @@ sequenceDiagram
 - Attestation setup
 - Memory encryption implementation
 - Enclave management
-- Security verification 
+- Security verification
+
+## Configuration Example
+
+```json
+{
+    "privacy": {
+        "differential_privacy": {
+            "enabled": true,
+            "epsilon": 1.0,
+            "delta": 1e-5
+        },
+        "federated_learning": {
+            "enabled": true,
+            "num_clients": 10,
+            "rounds": 100
+        },
+        "secure_computation": {
+            "enabled": true,
+            "num_parties": 3
+        },
+        "homomorphic_encryption": {
+            "enabled": true,
+            "key_size": 2048
+        }
+    }
+} 

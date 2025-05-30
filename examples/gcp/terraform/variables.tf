@@ -4,9 +4,34 @@ variable "project_id" {
 }
 
 variable "region" {
-  description = "GCP region to deploy resources"
+  description = "GCP region"
   type        = string
   default     = "us-central1"
+}
+
+variable "admin_username" {
+  description = "Username for the VM"
+  type        = string
+  default     = "gcpuser"
+}
+
+variable "ssh_public_key" {
+  description = "SSH public key for VM access"
+  type        = string
+}
+
+variable "bucket_name" {
+  description = "Name of the Cloud Storage bucket"
+  type        = string
+}
+
+variable "tags" {
+  description = "Tags to apply to all resources"
+  type        = map(string)
+  default     = {
+    Environment = "Confidential Computing"
+    Project     = "Secure Multi-Party Data Collaboration"
+  }
 }
 
 variable "private_subnet_cidr" {
@@ -19,12 +44,6 @@ variable "public_subnet_cidr" {
   description = "CIDR block for public subnet"
   type        = string
   default     = "10.0.2.0/24"
-}
-
-variable "bucket_name" {
-  description = "Name of the Cloud Storage bucket for training data"
-  type        = string
-  default     = "secure-training-data"
 }
 
 variable "access_policy_id" {

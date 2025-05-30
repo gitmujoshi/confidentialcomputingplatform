@@ -35,6 +35,20 @@ variable "image_id" {
 }
 
 variable "ssh_public_key" {
-  description = "SSH public key for instance access"
+  description = "SSH public key for VM access"
   type        = string
+}
+
+variable "bucket_name" {
+  description = "Name of the Object Storage bucket"
+  type        = string
+}
+
+variable "tags" {
+  description = "Tags to apply to all resources"
+  type        = map(string)
+  default     = {
+    Environment = "Confidential Computing"
+    Project     = "Secure Multi-Party Data Collaboration"
+  }
 } 

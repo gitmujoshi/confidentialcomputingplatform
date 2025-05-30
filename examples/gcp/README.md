@@ -1,89 +1,112 @@
-# GCP Secure Training Setup
+# GCP Confidential Computing Security Scripts
 
-This directory contains scripts and configurations for running secure machine learning training jobs on Google Cloud Platform using Vertex AI with encryption and security features.
+This directory contains Python scripts for monitoring and remediating security issues in GCP confidential computing environments.
 
 ## Prerequisites
 
-1. Google Cloud SDK installed and configured
-2. Python 3.8 or later
-3. Required Python packages:
-   ```bash
-   pip install google-cloud-aiplatform google-cloud-storage google-cloud-kms torch torchvision
-   ```
+- Python 3.7 or higher
+- GCP project with billing enabled
+- GCP credentials configured
+- Required GCP APIs enabled:
+  - Compute Engine API
+  - Cloud Storage API
+  - Cloud KMS API
+  - Cloud Monitoring API
+  - Security Command Center API
 
-## Configuration
+## Installation
 
-1. Update `config.json` with your GCP settings:
-   - Replace `your-project-id` with your GCP project ID
-   - Update KMS key names and paths
-   - Configure VPC network and subnet settings
-   - Set appropriate machine types and accelerator configurations
-
-2. Ensure service account permissions:
-   - Vertex AI service account with necessary permissions
-   - Cloud KMS key access permissions
-   - Cloud Storage bucket access permissions
-
-## Directory Structure
-
-```
-gcp/
-├── config.json           # GCP configuration
-├── train.py             # Training script
-├── training_job.py      # Training job management
-└── utils.py            # Utility functions
+1. Create a virtual environment:
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 
-## Usage
+2. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
 
-1. Set up secure environment:
-   ```bash
-   python utils.py
-   ```
+3. Set up GCP credentials:
+```bash
+export GOOGLE_CLOUD_PROJECT="your-project-id"
+export GOOGLE_APPLICATION_CREDENTIALS="path/to/your/credentials.json"
+```
 
-2. Start training job:
-   ```bash
-   python training_job.py
-   ```
+## Scripts
 
-3. Monitor training progress:
-   ```bash
-   # The training job script includes monitoring
-   # Or use Google Cloud Console to monitor jobs
-   ```
+### Monitor Security (`monitor_security.py`)
+
+This script monitors the security status of your GCP confidential computing environment, including:
+- Confidential instance status
+- Network traffic monitoring
+- Security Command Center findings
+- Storage bucket security
+- KMS keyring security
+
+Usage:
+```bash
+python scripts/monitor_security.py
+```
+
+### Remediate Security (`remediate_security.py`)
+
+This script automatically remediates common security issues in your GCP environment, including:
+- Enabling confidential computing on instances
+- Encrypting unencrypted disks
+- Enabling versioning and encryption on storage buckets
+- Enabling key rotation for KMS keys
+- Updating network firewall rules
+
+Usage:
+```bash
+python scripts/remediate_security.py
+```
 
 ## Security Features
 
-- Data encryption at rest using Cloud KMS
-- Network isolation using VPC
-- Service account-based access control
-- Secure storage with Cloud Storage encryption
-- Confidential computing support
+The scripts implement the following security features:
 
-## Monitoring and Logging
+1. **Confidential Computing**
+   - Enables confidential computing on instances
+   - Monitors confidential computing status
 
-- Training metrics available through Vertex AI
-- Cloud Logging for detailed monitoring
-- Cloud Storage access logs for storage monitoring
+2. **Encryption**
+   - Ensures disk encryption using customer-managed keys
+   - Enables storage bucket encryption
+   - Manages KMS key rotation
 
-## Cleanup
+3. **Network Security**
+   - Monitors network traffic
+   - Updates firewall rules
+   - Restricts public access
 
-To clean up resources:
-1. Stop any running training jobs
-2. Delete model artifacts from Cloud Storage
-3. Clean up temporary files
-4. Delete KMS keys if no longer needed
+4. **Storage Security**
+   - Enables versioning
+   - Enforces uniform bucket-level access
+   - Monitors bucket security settings
 
-## Troubleshooting
+5. **Monitoring and Alerting**
+   - Tracks security findings
+   - Monitors resource configurations
+   - Logs security events
 
-Common issues and solutions:
-1. Service account permission errors: Check IAM permissions
-2. VPC configuration issues: Verify network and subnet settings
-3. Storage access errors: Verify Cloud Storage permissions
-4. KMS key errors: Check key policy and access
+## Best Practices
 
-## Additional Resources
+1. Run the monitoring script regularly to check security status
+2. Review remediation actions before applying them
+3. Keep dependencies up to date
+4. Use service accounts with minimal required permissions
+5. Enable audit logging for all actions
 
-- [Vertex AI Documentation](https://cloud.google.com/vertex-ai)
-- [Cloud KMS Documentation](https://cloud.google.com/kms)
-- [GCP Security Best Practices](https://cloud.google.com/security/best-practices) 
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details. 

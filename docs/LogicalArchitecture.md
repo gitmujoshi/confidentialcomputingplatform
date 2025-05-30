@@ -1,384 +1,229 @@
-# Confidential Computing Platform - Logical Architecture
+# Confidential Computing Logical Architecture
 
-## System Overview
+## Overview
 
-The confidential computing system is designed to provide secure machine learning training in the cloud. The architecture ensures data privacy and model security through multiple layers of protection.
+This document outlines the logical architecture for our confidential computing implementation, focusing on secure model training and inference across multiple cloud providers.
 
-## Architecture Diagram
+## Core Components
 
-```mermaid
-flowchart TB
-    subgraph ClientEnvironment["Client Environment"]
-        Client[Client Application]
-        Config[Configuration]
-    end
+### 1. Secure Enclaves
+- AWS Nitro Enclaves for isolated execution
+- Secure attestation and validation
+- Encrypted communication channels
+- Secure storage for sensitive data
 
-    subgraph AzureCloud["Azure Cloud"]
-        subgraph SecureEnvironment["Secure Environment"]
-            Attest[Attestation Service]
-            KeyVault[Key Vault]
-            Storage[Secure Storage]
-        end
+### 2. Secure Multi-Party Computation
+- Distributed computation across multiple parties
+- Secret sharing for data privacy
+- Secure aggregation of results
+- Encrypted message passing
 
-        subgraph ConfidentialComputing["Confidential Computing"]
-            VM[Confidential VM]
-            Enclave[Secure Enclave]
-            Model[ML Model]
-            Data[Encrypted Data]
-        end
-    end
+### 3. Homomorphic Encryption
+- Paillier encryption for numerical data
+- Encrypted arithmetic operations
+- Secure model parameter updates
+- Privacy-preserving training
 
-    Client --> |1\. Request Training|VM
-    Config --> |2\. Load Config|VM
-    VM --> |3\. Request Attestation|Attest
-    Attest --> |4\. Verify Environment|VM
-    VM --> |5\. Request Keys|KeyVault
-    KeyVault --> |6\. Provide Keys|Enclave
-    VM --> |7\. Request Data|Storage
-    Storage --> |8\. Provide Data|Data
-    Data --> |9\. Load Data|Enclave
-    Enclave --> |10\. Train Model|Model
-    Model --> |11\. Save Model|Storage
-    Storage --> |12\. Training Complete|Client
+### 4. Differential Privacy
+- Privacy budget management
+- Noise addition mechanisms
+- Gradient clipping
+- Privacy-preserving optimization
 
-    classDef azure fill:#0072C6,stroke:#333,stroke-width:2px,color:white
-    classDef secure fill:#107C10,stroke:#333,stroke-width:2px,color:white
-    classDef client fill:#FFB900,stroke:#333,stroke-width:2px,color:black
+### 5. Federated Learning
+- Secure client-server architecture
+- Encrypted model updates
+- Secure aggregation
+- Privacy-preserving training
 
-    class Client,Config client
-    class Attest,KeyVault,Storage secure
-    class VM,Enclave,Model,Data azure
-```
+## Component Interactions
 
-### Architecture Diagram Description
+### Training Workflow
+1. Data Preparation
+   - Secure data loading
+   - Privacy-preserving preprocessing
+   - Data validation
 
-The architecture diagram illustrates a secure machine learning training workflow in Azure Cloud, organized into three main sections:
+2. Model Training
+   - Secure enclave initialization
+   - Privacy-preserving optimization
+   - Secure parameter updates
+   - Federated aggregation
 
-1. **Client Environment**
-   - Contains two components:
-     - Client Application: The main application that initiates training
-     - Configuration: Contains training and security settings
+3. Model Evaluation
+   - Secure inference
+   - Privacy-preserving metrics
+   - Model validation
 
-2. **Azure Cloud** (contains two sub-sections)
-   - **Secure Environment**
-     - Attestation Service: Verifies computing environment integrity
-     - Key Vault: Manages encryption keys and secrets
-     - Secure Storage: Stores encrypted data and models
+### Security Measures
+1. Data Protection
+   - Encryption at rest
+   - Secure communication
+   - Access control
 
-   - **Confidential Computing**
-     - Confidential VM: Provides hardware-level isolation
-     - Secure Enclave: Protected memory region for sensitive operations
-     - ML Model: The machine learning model being trained
-     - Encrypted Data: Training data protected by encryption
+2. Computation Security
+   - Secure enclaves
+   - Multi-party computation
+   - Homomorphic encryption
 
-The workflow follows a numbered sequence (1-12):
-1. Client requests training
-2. Configuration is loaded into VM
-3. VM requests attestation
-4. Environment is verified
-5. VM requests encryption keys
-6. Keys are provided to enclave
-7. VM requests training data
-8. Encrypted data is provided
-9. Data is loaded into enclave
-10. Model training occurs
-11. Model is saved
-12. Training completion is reported to client
+3. Privacy Guarantees
+   - Differential privacy
+   - Secure aggregation
+   - Privacy budget tracking
 
-The diagram uses color coding (defined in classDef):
-- Azure components: Blue (#0072C6)
-- Secure components: Green (#107C10)
-- Client components: Yellow (#FFB900)
+## Implementation Details
 
-This architecture ensures:
-- Data privacy through encryption
-- Secure computation in protected enclaves
-- Hardware-level isolation
-- Secure key management
-- End-to-end security in the training process
+### AWS Implementation
+- Nitro Enclaves for secure execution
+- KMS for key management
+- S3 for secure storage
+- VPC for network isolation
 
-## Key Components
+### Azure Implementation
+- Azure Confidential Computing
+- Key Vault for key management
+- Blob Storage for secure storage
+- Virtual Network for isolation
 
-* **Client Environment**
-  * Client Application: Initiates and manages training jobs
-  * Configuration: Contains settings for training and security
+### GCP Implementation
+- Confidential VMs
+- Cloud KMS for key management
+- Cloud Storage for secure storage
+- VPC for network isolation
 
-* **Secure Environment**
-  * Attestation Service: Verifies the integrity of the computing environment
-  * Key Vault: Manages encryption keys and secrets
-  * Secure Storage: Stores encrypted data and models
+## Security Considerations
 
-* **Confidential Computing**
-  * Confidential VM: Provides hardware-level isolation
-  * Secure Enclave: Protected memory region for sensitive operations
-  * ML Model: The machine learning model being trained
-  * Encrypted Data: Training data protected by encryption
+### Threat Model
+1. Data Privacy
+   - Unauthorized access
+   - Data leakage
+   - Inference attacks
 
-## Security Features
+2. Computation Security
+   - Side-channel attacks
+   - Memory attacks
+   - Network attacks
 
-1. **Hardware-level Protection**
-   * AMD SEV-SNP for VM isolation
-   * Secure enclaves for sensitive operations
+3. Model Security
+   - Model inversion
+   - Membership inference
+   - Model stealing
 
-2. **Data Protection**
-   * End-to-end encryption
-   * Secure key management
-   * Encrypted storage
+### Mitigation Strategies
+1. Data Protection
+   - Encryption
+   - Access control
+   - Secure storage
 
-3. **Access Control**
-   * Role-based access control (RBAC)
-   * Network security rules
-   * Authentication and authorization
+2. Computation Protection
+   - Secure enclaves
+   - Multi-party computation
+   - Homomorphic encryption
 
-## Integration Points
+3. Privacy Protection
+   - Differential privacy
+   - Secure aggregation
+   - Privacy budgets
 
-1. **Client Integration**
-   * REST API for job management
-   * Secure configuration management
-   * Status monitoring
+## Monitoring and Logging
 
-2. **Azure Services Integration**
-   * Azure Key Vault for key management
-   * Azure Storage for data storage
-   * Azure Monitor for security monitoring
+### Security Monitoring
+1. Enclave Monitoring
+   - Attestation status
+   - Resource usage
+   - Security events
+
+2. Privacy Monitoring
+   - Privacy budget tracking
+   - Data access logs
+   - Privacy violations
+
+3. Performance Monitoring
+   - Computation time
+   - Resource utilization
+   - Network latency
+
+### Logging
+1. Security Logs
+   - Access attempts
+   - Security events
+   - Policy violations
+
+2. Privacy Logs
+   - Privacy budget usage
+   - Data access
+   - Privacy metrics
+
+3. Performance Logs
+   - Computation metrics
+   - Resource usage
+   - Network statistics
 
 ## Deployment Considerations
 
-1. **Resource Requirements**
-   * Confidential computing capable VMs
-   * Sufficient storage for encrypted data
-   * Network bandwidth for secure communication
+### Infrastructure Requirements
+1. Compute Resources
+   - Secure enclaves
+   - Confidential VMs
+   - GPU support
 
-2. **Security Requirements**
-   * Azure AD integration
-   * Network security groups
-   * Key rotation policies
+2. Storage Requirements
+   - Secure storage
+   - Encrypted databases
+   - Backup systems
 
-3. **Monitoring Requirements**
-   * Security event logging
-   * Performance monitoring
-   * Resource utilization tracking
+3. Network Requirements
+   - Secure communication
+   - Network isolation
+   - Load balancing
 
-## 1. High-Level Architecture Overview
+### Security Requirements
+1. Access Control
+   - Authentication
+   - Authorization
+   - Role-based access
 
-### 1.1 Core Principles
-- Platform-agnostic design
-- Modular and extensible components
-- Zero-trust security model
-- Privacy-preserving computation
-- Multi-party collaboration support
+2. Encryption
+   - Data encryption
+   - Key management
+   - Secure communication
 
-### 1.2 Logical Components
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    Client Layer                             │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐  │
-│  │ Web Client  │  │ API Client  │  │ Management Console  │  │
-│  └─────────────┘  └─────────────┘  └─────────────────────┘  │
-└───────────────────────────┬─────────────────────────────────┘
-                            │
-┌───────────────────────────▼─────────────────────────────────┐
-│                    API Gateway Layer                        │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐  │
-│  │ Auth/API    │  │ Rate        │  │ Request             │  │
-│  │ Gateway     │  │ Limiting    │  │ Routing             │  │
-│  └─────────────┘  └─────────────┘  └─────────────────────┘  │
-└───────────────────────────┬─────────────────────────────────┘
-                            │
-┌───────────────────────────▼─────────────────────────────────┐
-│                    Security Layer                           │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐  │
-│  │ Identity    │  │ Access      │  │ Encryption          │  │
-│  │ Management  │  │ Control     │  │ Services            │  │
-│  └─────────────┘  └─────────────┘  └─────────────────────┘  │
-└───────────────────────────┬─────────────────────────────────┘
-                            │
-┌───────────────────────────▼─────────────────────────────────┐
-│                    Confidential Computing Layer             │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐  │
-│  │ Secure      │  │ Privacy-    │  │ Multi-Party         │  │
-│  │ Enclaves    │  │ Preserving  │  │ Computation         │  │
-│  └─────────────┘  │ Computing   │  └─────────────────────┘  │
-│                   └─────────────┘                           │
-└───────────────────────────┬─────────────────────────────────┘
-                            │
-┌───────────────────────────▼─────────────────────────────────┐
-│                    Data Layer                               │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐  │
-│  │ Secure      │  │ Metadata    │  │ Audit               │  │
-│  │ Storage     │  │ Management  │  │ Logging             │  │
-│  └─────────────┘  └─────────────┘  └─────────────────────┘  │
-└─────────────────────────────────────────────────────────────┘
-```
+3. Monitoring
+   - Security monitoring
+   - Privacy monitoring
+   - Performance monitoring
 
-## 2. Component Details
+## Future Considerations
 
-### 2.1 Client Layer
-- **Web Client**: Browser-based interface for user interaction
-- **API Client**: Programmatic access for integration
-- **Management Console**: Administrative interface for platform management
+### Scalability
+1. Horizontal Scaling
+   - Multiple enclaves
+   - Distributed computation
+   - Load balancing
 
-### 2.2 API Gateway Layer
-- **Authentication Gateway**: Handles identity verification and token management
-- **Rate Limiting**: Controls request throughput and prevents abuse
-- **Request Routing**: Directs requests to appropriate services
+2. Vertical Scaling
+   - Resource optimization
+   - Performance tuning
+   - Cost optimization
 
-### 2.3 Security Layer
-- **Identity Management**
-  - User authentication
-  - Multi-factor authentication
-  - Identity federation
-  - Role-based access control
+### Security Enhancements
+1. Advanced Encryption
+   - Post-quantum cryptography
+   - Advanced key management
+   - Enhanced privacy
 
-- **Access Control**
-  - Policy enforcement
-  - Permission management
-  - Session control
-  - Resource access validation
+2. Privacy Improvements
+   - Advanced differential privacy
+   - Secure multi-party computation
+   - Homomorphic encryption
 
-- **Encryption Services**
-  - Key management
-  - Data encryption/decryption
-  - Certificate management
-  - Secure key exchange
+### Performance Optimization
+1. Computation Optimization
+   - Parallel processing
+   - Resource optimization
+   - Network optimization
 
-### 2.4 Confidential Computing Layer
-- **Secure Enclaves**
-  - Trusted Execution Environment (TEE)
-  - Memory encryption
-  - Secure boot process
-  - Remote attestation
-
-- **Privacy-Preserving Computing**
-  - Homomorphic encryption
-  - Secure multi-party computation
-  - Federated learning
-  - Differential privacy
-
-- **Multi-Party Computation**
-  - Secure aggregation
-  - Privacy-preserving analytics
-  - Collaborative computation
-  - Data sharing protocols
-
-### 2.5 Data Layer
-- **Secure Storage**
-  - Encrypted data storage
-  - Data partitioning
-  - Backup and recovery
-  - Data lifecycle management
-
-- **Metadata Management**
-  - Data catalog
-  - Schema management
-  - Data lineage
-  - Version control
-
-- **Audit Logging**
-  - Activity tracking
-  - Compliance logging
-  - Security event logging
-  - Performance monitoring
-
-## 3. Cross-Cutting Concerns
-
-### 3.1 Security
-- End-to-end encryption
-- Zero-trust architecture
-- Secure communication channels
-- Threat detection and prevention
-
-### 3.2 Compliance
-- Data sovereignty
-- Privacy regulations
-- Industry standards
-- Audit requirements
-
-### 3.3 Monitoring
-- Performance metrics
-- Security monitoring
-- Resource utilization
-- Compliance tracking
-
-### 3.4 Operations
-- Deployment automation
-- Configuration management
-- Backup and recovery
-- Incident response
-
-## 4. Integration Points
-
-### 4.1 External Systems
-- Identity providers
-- Data sources
-- Analytics platforms
-- Monitoring systems
-
-### 4.2 Internal Services
-- Authentication services
-- Encryption services
-- Storage services
-- Compute services
-
-## 5. Implementation Considerations
-
-### 5.1 Cloud Provider Implementation
-- **AWS Implementation**
-  - Nitro Enclaves
-  - AWS KMS
-  - AWS IAM
-  - AWS CloudHSM
-
-- **Azure Implementation**
-  - Azure Confidential Computing
-  - Azure Key Vault
-  - Azure AD
-  - Azure HSM
-
-- **GCP Implementation**
-  - Confidential VMs
-  - Cloud KMS
-  - IAM
-  - Cloud HSM
-
-- **OCI Implementation**
-  - OCI Confidential Computing
-  - OCI Vault
-  - OCI Identity and Access Management
-  - OCI Cloud Guard
-  - OCI Security Zones
-  - OCI Data Safe
-  - OCI Key Management Service
-  - OCI Security Advisor
-
-### 5.2 Hybrid Deployment
-- Multi-cloud support
-- On-premises integration
-- Edge computing support
-- Cross-cloud data sharing
-
-### 5.3 Scalability
-- Horizontal scaling
-- Load balancing
-- Resource optimization
-- Performance tuning
-
-## 6. Security Controls
-
-### 6.1 Data Protection
-- Data encryption at rest
-- Data encryption in transit
-- Secure key management
-- Data access controls
-
-### 6.2 Access Management
-- Role-based access control
-- Least privilege principle
-- Session management
-- Access monitoring
-
-### 6.3 Compliance
-- Data residency
-- Privacy regulations
-- Industry standards
-- Audit requirements 
+2. Cost Optimization
+   - Resource utilization
+   - Pricing optimization
+   - Performance tuning 

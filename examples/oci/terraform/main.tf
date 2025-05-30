@@ -15,26 +15,26 @@ provider "oci" {
   region           = var.region
 }
 
-# VCN Configuration
+# VCN
 resource "oci_core_vcn" "confidential_vcn" {
+  cidr_block     = "10.0.0.0/16"
   compartment_id = var.compartment_id
   display_name   = "confidential-vcn"
-  cidr_block     = "10.0.0.0/16"
-  dns_label      = "confidentialvcn"
+  dns_label      = "confidential"
 }
 
-# Subnet Configuration
+# Subnet
 resource "oci_core_subnet" "confidential_subnet" {
-  compartment_id = var.compartment_id
-  vcn_id         = oci_core_vcn.confidential_vcn.id
-  display_name   = "confidential-subnet"
-  cidr_block     = "10.0.1.0/24"
-  dns_label      = "confidentialsubnet"
+  cidr_block        = "10.0.1.0/24"
+  compartment_id    = var.compartment_id
+  vcn_id            = oci_core_vcn.confidential_vcn.id
+  display_name      = "confidential-subnet"
+  dns_label         = "confidential"
   security_list_ids = [oci_core_security_list.confidential_security_list.id]
   route_table_id    = oci_core_route_table.confidential_route_table.id
 }
 
-# Security List Configuration
+# Security List
 resource "oci_core_security_list" "confidential_security_list" {
   compartment_id = var.compartment_id
   vcn_id         = oci_core_vcn.confidential_vcn.id
@@ -50,6 +50,7 @@ resource "oci_core_security_list" "confidential_security_list" {
     protocol    = "6"  # TCP
     source      = "0.0.0.0/0"
     description = "Allow SSH access"
+
     tcp_options {
       min = 22
       max = 22
@@ -57,7 +58,7 @@ resource "oci_core_security_list" "confidential_security_list" {
   }
 }
 
-# Route Table Configuration
+# Route Table
 resource "oci_core_route_table" "confidential_route_table" {
   compartment_id = var.compartment_id
   vcn_id         = oci_core_vcn.confidential_vcn.id
@@ -70,7 +71,7 @@ resource "oci_core_route_table" "confidential_route_table" {
   }
 }
 
-# Internet Gateway Configuration
+# Internet Gateway
 resource "oci_core_internet_gateway" "confidential_ig" {
   compartment_id = var.compartment_id
   vcn_id         = oci_core_vcn.confidential_vcn.id
@@ -78,16 +79,16 @@ resource "oci_core_internet_gateway" "confidential_ig" {
   enabled        = true
 }
 
-# Confidential Computing Instance Configuration
+# Confidential VM Instance
 resource "oci_core_instance" "confidential_instance" {
   availability_domain = data.oci_identity_availability_domains.ads.availability_domains[0].name
   compartment_id      = var.compartment_id
-  display_name        = "confidential-instance"
-  shape              = "VM.Standard.E4.Flex"  # Shape that supports confidential computing
+  display_name        = "confidential-vm"
+  shape               = "VM.Standard.E4.Flex"  # Supports AMD SEV
 
   shape_config {
-    ocpus         = 1
-    memory_in_gbs = 16
+    ocpus         = 2
+    memory_in_gbs = 32
   }
 
   create_vnic_details {
@@ -104,16 +105,44 @@ resource "oci_core_instance" "confidential_instance" {
   metadata = {
     ssh_authorized_keys = var.ssh_public_key
   }
+
+  is_pv_encryption_in_transit_enabled = true
 }
 
-# Vault Configuration for Key Management
+# Vault
 resource "oci_kms_vault" "confidential_vault" {
   compartment_id = var.compartment_id
   display_name   = "confidential-vault"
   vault_type     = "DEFAULT"
 }
 
-# Data source for availability domains
+# Key
+resource "oci_kms_key" "confidential_key" {
+  compartment_id = var.compartment_id
+  display_name   = "confidential-key"
+  key_shape {
+    algorithm = "AES"
+    length    = 32
+  }
+  management_endpoint = oci_kms_vault.confidential_vault.management_endpoint
+  protection_mode     = "SOFTWARE"
+}
+
+# Object Storage Bucket
+resource "oci_objectstorage_bucket" "confidential_bucket" {
+  compartment_id = var.compartment_id
+  name           = var.bucket_name
+  namespace      = data.oci_objectstorage_namespace.ns.namespace
+  access_type    = "NoPublicAccess"
+  versioning     = "Enabled"
+  kms_key_id     = oci_kms_key.confidential_key.id
+}
+
+# Data Sources
 data "oci_identity_availability_domains" "ads" {
   compartment_id = var.tenancy_ocid
+}
+
+data "oci_objectstorage_namespace" "ns" {
+  compartment_id = var.compartment_id
 } 

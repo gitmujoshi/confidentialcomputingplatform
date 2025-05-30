@@ -1,24 +1,27 @@
-# AWS Secure Training Infrastructure
+# AWS Confidential Computing Terraform Example
 
-This directory contains Terraform configurations for deploying secure training infrastructure on AWS.
+This directory contains Terraform configurations for deploying a confidential computing environment on Amazon Web Services (AWS) using Nitro Enclaves.
 
 ## Prerequisites
 
-1. AWS CLI installed and configured
-2. Terraform installed (version >= 1.0.0)
-3. AWS credentials configured with appropriate permissions
+- AWS account with appropriate permissions
+- AWS CLI installed and configured
+- Terraform installed (version 0.12 or later)
 
-## Infrastructure Components
+## Configuration
 
-The Terraform configuration creates the following resources:
+1. Copy the example variables file:
+   ```bash
+   cp terraform.tfvars.example terraform.tfvars
+   ```
 
-1. VPC with public and private subnets
-2. KMS key for data encryption
-3. S3 bucket for training data with encryption
-4. IAM role and policy for SageMaker
-5. Security group for SageMaker training jobs
+2. Update the variables in `terraform.tfvars` with your AWS-specific values:
+   - `aws_region`: AWS region to deploy resources
+   - `ami_id`: AMI ID for the EC2 instance (must support Nitro Enclaves)
+   - `key_name`: Name of your SSH key pair
+   - `bucket_name`: Name for your S3 bucket
 
-## Usage
+## Deployment
 
 1. Initialize Terraform:
    ```bash
@@ -35,47 +38,34 @@ The Terraform configuration creates the following resources:
    terraform apply
    ```
 
-4. To destroy the infrastructure:
-   ```bash
-   terraform destroy
-   ```
+## Resources Created
 
-## Configuration
-
-The infrastructure can be configured by modifying the variables in `variables.tf` or by providing a `terraform.tfvars` file with the following variables:
-
-- `aws_region`: AWS region to deploy resources
-- `vpc_cidr`: CIDR block for VPC
-- `availability_zones`: List of availability zones
-- `private_subnet_cidrs`: CIDR blocks for private subnets
-- `public_subnet_cidrs`: CIDR blocks for public subnets
-- `bucket_name`: Name of the S3 bucket for training data
-- `tags`: Tags to apply to all resources
+- VPC with Internet Gateway
+- Subnet
+- Security Group
+- EC2 Instance (Nitro Enclaves enabled)
+- KMS Key
+- S3 Bucket with encryption
+- IAM Role and Policy for Enclaves
 
 ## Security Features
 
-- VPC with public and private subnets
-- KMS encryption for data at rest
-- S3 bucket encryption
-- IAM role-based access control
-- Security group for network isolation
-
-## Outputs
-
-The configuration outputs the following values:
-
-- VPC ID
-- Subnet IDs
-- KMS key ARN
-- S3 bucket name
-- SageMaker execution role ARN
-- Security group ID
+- Uses AWS Nitro Enclaves for confidential computing
+- Encrypted EBS volumes
+- KMS encryption for S3 bucket
+- Secure networking with security groups
+- IAM roles and policies for least privilege access
+- S3 bucket versioning enabled
 
 ## Cleanup
 
-To clean up all resources:
+To destroy all created resources:
 ```bash
 terraform destroy
 ```
 
-Note: This will delete all resources created by this Terraform configuration. 
+## References
+
+- [AWS Nitro Enclaves Documentation](https://docs.aws.amazon.com/enclaves/latest/user/nitro-enclave.html)
+- [AWS Terraform Provider Documentation](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
+- [AWS Security Best Practices](https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html) 

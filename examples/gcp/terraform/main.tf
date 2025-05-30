@@ -14,54 +14,88 @@ provider "google" {
 }
 
 # VPC Network
-resource "google_compute_network" "training_network" {
-  name                    = "secure-training-network"
+resource "google_compute_network" "confidential_vpc" {
+  name                    = "confidential-vpc"
   auto_create_subnetworks = false
 }
 
-# Subnets
-resource "google_compute_subnetwork" "private_subnet" {
-  name          = "secure-training-private-subnet"
-  ip_cidr_range = var.private_subnet_cidr
-  network       = google_compute_network.training_network.id
-  region        = var.region
-
-  private_ip_google_access = true
-}
-
-resource "google_compute_subnetwork" "public_subnet" {
-  name          = "secure-training-public-subnet"
-  ip_cidr_range = var.public_subnet_cidr
-  network       = google_compute_network.training_network.id
+# Subnet
+resource "google_compute_subnetwork" "confidential_subnet" {
+  name          = "confidential-subnet"
+  ip_cidr_range = "10.0.0.0/24"
+  network       = google_compute_network.confidential_vpc.id
   region        = var.region
 }
 
-# Cloud KMS Key Ring and Key
-resource "google_kms_key_ring" "training_keyring" {
-  name     = "secure-training-keyring"
+# Firewall Rules
+resource "google_compute_firewall" "confidential_fw" {
+  name    = "confidential-fw"
+  network = google_compute_network.confidential_vpc.name
+
+  allow {
+    protocol = "tcp"
+    ports    = ["22"]
+  }
+
+  source_ranges = ["0.0.0.0/0"]
+  target_tags   = ["confidential-vm"]
+}
+
+# Confidential VM Instance
+resource "google_compute_instance" "confidential_vm" {
+  name         = "confidential-vm"
+  machine_type = "n2d-standard-2"  # Supports AMD SEV
+  zone         = "${var.region}-a"
+
+  tags = ["confidential-vm"]
+
+  boot_disk {
+    initialize_params {
+      image = "ubuntu-os-cloud/ubuntu-2004-lts"
+      size  = 50
+    }
+    kms_key_self_link = google_kms_crypto_key.vm_key.id
+  }
+
+  network_interface {
+    subnetwork = google_compute_subnetwork.confidential_subnet.name
+    access_config {
+      // Ephemeral public IP
+    }
+  }
+
+  confidential_instance_config {
+    enable_confidential_compute = true
+  }
+
+  metadata = {
+    ssh-keys = "${var.admin_username}:${var.ssh_public_key}"
+  }
+}
+
+# KMS Key Ring
+resource "google_kms_key_ring" "confidential_keyring" {
+  name     = "confidential-keyring"
   location = var.region
 }
 
-resource "google_kms_crypto_key" "training_key" {
-  name     = "secure-training-key"
-  key_ring = google_kms_key_ring.training_keyring.id
+# KMS Crypto Key
+resource "google_kms_crypto_key" "vm_key" {
+  name     = "vm-key"
+  key_ring = google_kms_key_ring.confidential_keyring.id
 
   version_template {
     algorithm = "GOOGLE_SYMMETRIC_ENCRYPTION"
   }
 
-  rotation_period = "7776000s" # 90 days
-
-  lifecycle {
-    prevent_destroy = true
-  }
+  rotation_period = "7776000s"  # 90 days
 }
 
 # Cloud Storage Bucket
-resource "google_storage_bucket" "training_data" {
+resource "google_storage_bucket" "confidential_bucket" {
   name          = var.bucket_name
   location      = var.region
-  force_destroy = false
+  force_destroy = true
 
   uniform_bucket_level_access = true
 
@@ -70,33 +104,40 @@ resource "google_storage_bucket" "training_data" {
   }
 
   encryption {
-    default_kms_key_name = google_kms_crypto_key.training_key.id
+    default_kms_key_name = google_kms_crypto_key.bucket_key.id
   }
 }
 
-# Service Account for Vertex AI
-resource "google_service_account" "vertex_ai_sa" {
-  account_id   = "secure-training-vertex-ai"
-  display_name = "Service Account for Secure Training"
+# KMS Crypto Key for Bucket
+resource "google_kms_crypto_key" "bucket_key" {
+  name     = "bucket-key"
+  key_ring = google_kms_key_ring.confidential_keyring.id
+
+  version_template {
+    algorithm = "GOOGLE_SYMMETRIC_ENCRYPTION"
+  }
+
+  rotation_period = "7776000s"  # 90 days
 }
 
-# IAM Policy for Service Account
-resource "google_project_iam_member" "vertex_ai_sa_storage" {
-  project = var.project_id
-  role    = "roles/storage.objectViewer"
-  member  = "serviceAccount:${google_service_account.vertex_ai_sa.email}"
+# IAM Service Account
+resource "google_service_account" "confidential_sa" {
+  account_id   = "confidential-sa"
+  display_name = "Confidential Computing Service Account"
 }
 
-resource "google_project_iam_member" "vertex_ai_sa_kms" {
+# IAM Policy Binding
+resource "google_project_iam_member" "confidential_sa_binding" {
   project = var.project_id
-  role    = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
-  member  = "serviceAccount:${google_service_account.vertex_ai_sa.email}"
+  role    = "roles/storage.admin"
+  member  = "serviceAccount:${google_service_account.confidential_sa.email}"
 }
 
-resource "google_project_iam_member" "vertex_ai_sa_aiplatform" {
-  project = var.project_id
-  role    = "roles/aiplatform.user"
-  member  = "serviceAccount:${google_service_account.vertex_ai_sa.email}"
+# Cloud KMS IAM Binding
+resource "google_kms_crypto_key_iam_member" "crypto_key_binding" {
+  crypto_key_id = google_kms_crypto_key.vm_key.id
+  role          = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
+  member        = "serviceAccount:${google_service_account.confidential_sa.email}"
 }
 
 # VPC Service Controls
@@ -149,4 +190,5 @@ resource "google_compute_security_policy" "training_policy" {
       }
     }
   }
+} 
 } 

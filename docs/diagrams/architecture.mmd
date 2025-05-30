@@ -1,46 +1,63 @@
-graph LR
-    subgraph "Client Environment"
-        Client[Client Application]
-        Config[Configuration]
+flowchart TB
+    subgraph ClientLayer["Client Layer"]
+        WebClient[Web Client]
+        APIClient[API Client]
+        Console[Management Console]
     end
 
-    subgraph "Azure Cloud"
-        subgraph "Secure Environment"
-            Attest[Attestation Service]
-            KeyVault[Key Vault]
-            Storage[Secure Storage]
+    subgraph SecurityLayer["Security Layer"]
+        subgraph SecureEnclaves["Secure Enclaves"]
+            NitroEnclave[AWS Nitro Enclave]
+            Attestation[Attestation Service]
+            SecureStorage[Secure Storage]
         end
 
-        subgraph "Confidential Computing"
-            VM[Confidential VM]
-            Enclave[Secure Enclave]
-            Model[ML Model]
-            Data[Encrypted Data]
+        subgraph PrivacyPreserving["Privacy Preserving"]
+            HomomorphicEnc[Homomorphic Encryption]
+            DifferentialPrivacy[Differential Privacy]
+            FederatedLearning[Federated Learning]
         end
 
-        subgraph "Security Services"
-            Monitor[Security Monitor]
-            Alert[Alert System]
-            Remediate[Remediation Service]
+        subgraph MultiPartyComp["Multi-Party Computation"]
+            SecureParty[Secure Party]
+            SecretSharing[Secret Sharing]
+            SecureAgg[Secure Aggregation]
         end
     end
 
-    Client -->|1\. Request Training| VM
-    Config -->|2\. Load Config| VM
-    VM -->|3\. Attest| Attest
-    Attest -->|4\. Verify| VM
-    VM -->|5\. Get Keys| KeyVault
-    VM -->|6\. Load Data| Storage
-    Storage -->|7\. Encrypted Data| Data
-    KeyVault -->|8\. Decryption Keys| Enclave
-    Data -->|9\. Process| Enclave
-    Enclave -->|10\. Train| Model
-    Model -->|11\. Save| Storage
-    Monitor -->|12\. Monitor| VM
-    Monitor -->|13\. Monitor| Storage
-    Monitor -->|14\. Monitor| KeyVault
-    Monitor -->|15\. Alert| Alert
-    Alert -->|16\. Trigger| Remediate
-    Remediate -->|17\. Fix Issues| VM
-    Remediate -->|18\. Fix Issues| Storage
-    Remediate -->|19\. Fix Issues| KeyVault 
+    subgraph DataLayer["Data Layer"]
+        EncryptedData[Encrypted Data]
+        ModelParams[Model Parameters]
+        PrivacyMetrics[Privacy Metrics]
+    end
+
+    WebClient --> |1. Request|APIClient
+    APIClient --> |2. Authenticate|SecurityLayer
+    Console --> |3. Monitor|SecurityLayer
+
+    SecurityLayer --> |4. Process|DataLayer
+    DataLayer --> |5. Update|SecurityLayer
+
+    subgraph SecureEnclaves
+        NitroEnclave --> |6. Verify|Attestation
+        Attestation --> |7. Store|SecureStorage
+    end
+
+    subgraph PrivacyPreserving
+        HomomorphicEnc --> |8. Encrypt|ModelParams
+        DifferentialPrivacy --> |9. Add Noise|PrivacyMetrics
+        FederatedLearning --> |10. Aggregate|ModelParams
+    end
+
+    subgraph MultiPartyComp
+        SecureParty --> |11. Share|SecretSharing
+        SecretSharing --> |12. Aggregate|SecureAgg
+    end
+
+    classDef client fill:#FFB900,stroke:#333,stroke-width:2px,color:black
+    classDef security fill:#107C10,stroke:#333,stroke-width:2px,color:white
+    classDef data fill:#0072C6,stroke:#333,stroke-width:2px,color:white
+
+    class WebClient,APIClient,Console client
+    class NitroEnclave,Attestation,SecureStorage,HomomorphicEnc,DifferentialPrivacy,FederatedLearning,SecureParty,SecretSharing,SecureAgg security
+    class EncryptedData,ModelParams,PrivacyMetrics data 

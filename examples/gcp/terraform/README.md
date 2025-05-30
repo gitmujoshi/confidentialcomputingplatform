@@ -1,26 +1,28 @@
-# GCP Secure Training Infrastructure
+# GCP Confidential Computing Terraform Example
 
-This directory contains Terraform configurations for deploying secure training infrastructure on Google Cloud Platform.
+This directory contains Terraform configurations for deploying a confidential computing environment on Google Cloud Platform (GCP) using AMD SEV.
 
 ## Prerequisites
 
-1. Google Cloud SDK installed and configured
-2. Terraform installed (version >= 1.0.0)
-3. GCP project with billing enabled
-4. Appropriate IAM permissions
+- GCP project with billing enabled
+- GCP CLI installed and configured
+- Terraform installed (version 0.12 or later)
 
-## Infrastructure Components
+## Configuration
 
-The Terraform configuration creates the following resources:
+1. Copy the example variables file:
+   ```bash
+   cp terraform.tfvars.example terraform.tfvars
+   ```
 
-1. VPC network with public and private subnets
-2. Cloud KMS key ring and key for encryption
-3. Cloud Storage bucket for training data
-4. Service account for Vertex AI
-5. VPC Service Controls
-6. Cloud Armor security policy
+2. Update the variables in `terraform.tfvars` with your GCP-specific values:
+   - `project_id`: Your GCP project ID
+   - `region`: GCP region to deploy resources
+   - `admin_username`: VM admin username
+   - `ssh_public_key`: Your SSH public key
+   - `bucket_name`: Name for your Cloud Storage bucket
 
-## Usage
+## Deployment
 
 1. Initialize Terraform:
    ```bash
@@ -37,59 +39,34 @@ The Terraform configuration creates the following resources:
    terraform apply
    ```
 
-4. To destroy the infrastructure:
-   ```bash
-   terraform destroy
-   ```
+## Resources Created
 
-## Configuration
-
-The infrastructure can be configured by modifying the variables in `variables.tf` or by providing a `terraform.tfvars` file with the following variables:
-
-- `project_id`: GCP project ID
-- `region`: GCP region to deploy resources
-- `private_subnet_cidr`: CIDR block for private subnet
-- `public_subnet_cidr`: CIDR block for public subnet
-- `bucket_name`: Name of the Cloud Storage bucket
-- `access_policy_id`: Access Policy ID for VPC Service Controls
-- `blacklisted_ips`: List of IP addresses to block
-- `labels`: Labels to apply to all resources
+- VPC Network
+- Subnet
+- Firewall Rules
+- Confidential VM Instance (AMD SEV enabled)
+- KMS Key Ring and Keys
+- Cloud Storage Bucket
+- IAM Service Account and Policies
 
 ## Security Features
 
-- VPC network with public and private subnets
-- Cloud KMS encryption for data at rest
-- Cloud Storage bucket encryption
-- Service account-based access control
-- VPC Service Controls for API access
-- Cloud Armor security policy
-- Confidential computing support
-
-## Outputs
-
-The configuration outputs the following values:
-
-- VPC network ID
-- Subnet IDs
-- KMS key name
-- Cloud Storage bucket name
-- Service account email
-- VPC Service Controls perimeter name
-- Security policy name
+- Uses GCP Confidential Computing with AMD SEV
+- Encrypted boot disks using Cloud KMS
+- Secure networking with firewall rules
+- Cloud KMS encryption for storage
+- IAM service account with least privilege
+- Cloud Storage bucket with uniform access control
 
 ## Cleanup
 
-To clean up all resources:
+To destroy all created resources:
 ```bash
 terraform destroy
 ```
 
-Note: This will delete all resources created by this Terraform configuration.
+## References
 
-## Additional Security Considerations
-
-1. Enable Cloud Audit Logs for all services
-2. Configure Cloud Monitoring alerts
-3. Set up Cloud Security Command Center
-4. Implement regular key rotation
-5. Use Cloud IAM conditions for fine-grained access control 
+- [GCP Confidential Computing Documentation](https://cloud.google.com/confidential-computing)
+- [GCP Terraform Provider Documentation](https://registry.terraform.io/providers/hashicorp/google/latest/docs)
+- [GCP Security Best Practices](https://cloud.google.com/security/best-practices) 

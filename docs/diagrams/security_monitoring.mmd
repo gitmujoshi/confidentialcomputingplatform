@@ -1,42 +1,54 @@
-graph LR
-  subgraph Security_Monitoring
-    Monitor[Security Monitor]
-    Alert[Alert System]
-    Remediate[Remediation Service]
-  end
+flowchart TB
+    subgraph Monitoring["Security Monitoring"]
+        subgraph EnclaveMonitor["Enclave Monitoring"]
+            AttestStatus[Attestation Status]
+            ResourceUsage[Resource Usage]
+            SecurityEvents[Security Events]
+        end
 
-  subgraph Azure_Resources
-    VM[Confidential VM]
-    Storage[Secure Storage]
-    KV[Key Vault]
-    NSG[Network Security]
-  end
+        subgraph PrivacyMonitor["Privacy Monitoring"]
+            BudgetTracking[Privacy Budget]
+            DataAccess[Data Access]
+            PrivacyViolations[Privacy Violations]
+        end
 
-  subgraph Security_Events
-    Auth[Authentication]
-    Access[Access Control]
-    Network[Network Activity]
-    Config[Configuration]
-  end
+        subgraph PerfMonitor["Performance Monitoring"]
+            CompTime[Computation Time]
+            ResourceUtil[Resource Utilization]
+            NetworkLatency[Network Latency]
+        end
+    end
 
-  Monitor -->|Monitor| VM
-  Monitor -->|Monitor| Storage
-  Monitor -->|Monitor| KV
-  Monitor -->|Monitor| NSG
+    subgraph Logging["Logging System"]
+        subgraph SecurityLogs["Security Logs"]
+            AccessAttempts[Access Attempts]
+            SecurityEvents[Security Events]
+            PolicyViolations[Policy Violations]
+        end
 
-  VM -->|Events| Auth
-  Storage -->|Events| Access
-  KV -->|Events| Access
-  NSG -->|Events| Network
+        subgraph PrivacyLogs["Privacy Logs"]
+            BudgetUsage[Budget Usage]
+            DataAccess[Data Access]
+            PrivacyMetrics[Privacy Metrics]
+        end
 
-  Auth -->|Report| Monitor
-  Access -->|Report| Monitor
-  Network -->|Report| Monitor
-  Config -->|Report| Monitor
+        subgraph PerfLogs["Performance Logs"]
+            CompMetrics[Computation Metrics]
+            ResourceUsage[Resource Usage]
+            NetworkStats[Network Statistics]
+        end
+    end
 
-  Monitor -->|Trigger| Alert
-  Alert -->|Notify| Remediate
-  Remediate -->|Fix| VM
-  Remediate -->|Fix| Storage
-  Remediate -->|Fix| KV
-  Remediate -->|Fix| NSG
+    EnclaveMonitor --> |1. Monitor|Logging
+    PrivacyMonitor --> |2. Track|Logging
+    PerfMonitor --> |3. Measure|Logging
+
+    SecurityLogs --> |4. Alert|Monitoring
+    PrivacyLogs --> |5. Report|Monitoring
+    PerfLogs --> |6. Analyze|Monitoring
+
+    classDef monitor fill:#FFB900,stroke:#333,stroke-width:2px,color:black
+    classDef logging fill:#107C10,stroke:#333,stroke-width:2px,color:white
+
+    class AttestStatus,ResourceUsage,SecurityEvents,BudgetTracking,DataAccess,PrivacyViolations,CompTime,ResourceUtil,NetworkLatency monitor
+    class AccessAttempts,SecurityEvents,PolicyViolations,BudgetUsage,DataAccess,PrivacyMetrics,CompMetrics,ResourceUsage,NetworkStats logging
