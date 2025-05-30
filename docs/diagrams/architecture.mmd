@@ -5,6 +5,11 @@ flowchart TB
         Console[Management Console]
     end
 
+    %% Add spacing nodes
+    Spacer1[ ]
+    Spacer2[ ]
+    Spacer3[ ]
+
     subgraph SecurityLayer["Security Layer"]
         subgraph SecureEnclaves["Secure Enclaves"]
             NitroEnclave[AWS Nitro Enclave]
@@ -32,11 +37,14 @@ flowchart TB
     end
 
     WebClient --> |1\. Request|APIClient
-    APIClient --> |2\. Authenticate|SecurityLayer
-    Console --> |3\. Monitor|SecurityLayer
+    APIClient --> |2\. Authenticate|Spacer1
+    Console --> |3\. Monitor|Spacer1
+    Spacer1 --> SecurityLayer
 
-    SecurityLayer --> |4\. Process|DataLayer
-    DataLayer --> |5\. Update|SecurityLayer
+    SecurityLayer --> |4\. Process|Spacer2
+    Spacer2 --> DataLayer
+    DataLayer --> |5\. Update|Spacer3
+    Spacer3 --> SecurityLayer
 
     subgraph SecureEnclaves
         NitroEnclave --> |6\. Verify|Attestation
@@ -57,8 +65,10 @@ flowchart TB
     classDef client fill:#FFB900,stroke:#333,stroke-width:2px,color:black
     classDef security fill:#107C10,stroke:#333,stroke-width:2px,color:white
     classDef data fill:#0072C6,stroke:#333,stroke-width:2px,color:white
+    classDef spacer fill:none,stroke:none
 
     class WebClient,APIClient,Console client
     class NitroEnclave,Attestation,SecureStorage,HomomorphicEnc,DifferentialPrivacy,FederatedLearning,SecureParty,SecretSharing,SecureAgg security
     class EncryptedData,ModelParams,PrivacyMetrics data
+    class Spacer1,Spacer2,Spacer3 spacer
     
